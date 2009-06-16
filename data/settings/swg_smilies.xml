@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>                             
+<swg_smilies_file_v1 xmlns="urn:de.direct-netware.xmlns:swg.smilies.v1">
+
+ <angel value='angel.png'><smileycode value='*angel*' /></angel>
+ <angry value='angry.png'><smileycode value='*angry*' /></angry>
+ <bandit value='bandit.gif'><smileycode value='*bandit*' /></bandit>
+ <beerchug value='beerchug.gif'><smileycode value='*beerchug*' /></beerchug>
+
+ <biggrin value='biggrin.png'>
+  <smileycode value=':D' />   
+  <smileycode value=':-D' />  
+  <smileycode value='*bg*' /> 
+  <smileycode value='*fg*' /> 
+  <smileycode value='*biggrin*' />
+ </biggrin>                       
+
+ <cheesy value='cheesy.png'><smileycode value='*cheesy*' /></cheesy>
+
+ <confused value='confused.png'>
+  <smileycode value=':?' />     
+  <smileycode value=':-?' />    
+  <smileycode value='*confused*' />
+ </confused>                       
+
+ <cool value='cool.png'>
+  <smileycode value='B)' />
+  <smileycode value='B-)' />
+  <smileycode value='*cool*' />
+ </cool>                       
+
+ <cry value='cry.gif'>
+  <smileycode value=":'(" />
+  <smileycode value='*cry*' />
+ </cry>                       
+
+ <dazed value='dazed.png'><smileycode value='*dazed*' /></dazed>
+ <dead value='dead.png'><smileycode value='*dead*' /></dead>    
+ <devil value='devil.png'><smileycode value='*devil*' /></devil>
+ <devilgun value='devilgun.png'><smileycode value='*devilgun*' /></devilgun>
+ <ehm value='ehm.png'><smileycode value='*ehm*' /></ehm>                    
+ <evil value='evil.png'><smileycode value='*evil*' /></evil>                
+
+ <evilgrin value='evilgrin.png'>
+  <smileycode value='&gt;:)' /> 
+  <smileycode value='&gt;:-)' />
+  <smileycode value='*evilgrin*' />
+ </evilgrin>                       
+
+ <frustrated value='frustrated.gif'><smileycode value='*frustrated*' /></frustrated>
+ <hmm value='hmm.png'><smileycode value='*hmm*' /></hmm>                            
+ <idea value='idea.gif'><smileycode value='*idea*' /></idea>                        
+ <ignore value='ignore.png'><smileycode value='*ignore*' /></ignore>                
+ <imu2 value='imu2.gif'><smileycode value='*imu2*' /></imu2>                        
+ <indifferent value='indifferent.png'><smileycode value='*indifferent*' /></indifferent>
+ <jitter value='jitter.gif'><smileycode value='*jitter*' /></jitter>                    
+ <lol value='lol.gif'><smileycode value='*lol*' /></lol>                                
+ <love value='love.gif'><smileycode value='*love*' /></love>                            
+ <mercy value='mercy.png'><smileycode value='*mercy*' /></mercy>                        
+ <missiler value='missiler.gif'><smileycode value='*missiler*' /></missiler>            
+ <no_image value='no_image.png'><smileycode value='*no_image*' /></no_image>            
+ <nuke value='nuke.gif'><smileycode value='*nuke*' /></nuke>                            
+
+ <painful value='painful.png'>
+  <smileycode value='--"' />  
+  <smileycode value="--'" />  
+  <smileycode value='*painful*' />
+ </painful>                       
+
+ <resign value='resign.gif'><smileycode value='*resign*' /></resign>
+ <rofl value='rofl.gif'><smileycode value='*rofl*' /></rofl>        
+ <rollingpin value='rollingpin.png'><smileycode value='*rollingpin*' /></rollingpin>
+
+ <sad value='sad.png'>
+  <smileycode value=':(' />
+  <smileycode value=':-(' />
+  <smileycode value='*sad*' />
+ </sad>                       
+
+ <shocked value='shocked.gif'>
+  <smileycode value=':o' />   
+  <smileycode value=':O' />   
+  <smileycode value=':-o' />  
+  <smileycode value=':-O' />  
+  <smileycode value='*shocked*' />
+ </shocked>
+
+ <sleep value='sleep.png'>
+  <smileycode value='*sleep*' />
+  <smileycode value='*zZz*' />
+ </sleep>
+
+ <smile value='smile.png'>
+  <smileycode value=':)' />
+  <smileycode value=':-)' />
+  <smileycode value='*g*' />
+  <smileycode value='*grin*' />
+  <smileycode value='*smile*' />
+ </smile>
+
+ <sniper value='sniper.gif'><smileycode value='*sniper*' /></sniper>
+ <soon value='soon.png'><smileycode value='*soon*' /></soon>
+ <spam value='spam.png'><smileycode value='*spam*' /></spam>
+ <surprised value='surprised.png'><smileycode value='*surprised*' /></surprised>
+ <talker value='talker.gif'><smileycode value='*talker*' /></talker>
+
+ <tongue value='tongue.gif'>
+  <smileycode value=':p' />
+  <smileycode value=':P' />
+  <smileycode value=':-p' />
+  <smileycode value=':-P' />
+  <smileycode value='*tongue*' />
+ </tongue>
+
+ <wallout value='wallout.gif'><smileycode value='*wallout*' /></wallout>
+ <warning value='warning.png'><smileycode value='*warning*' /></warning>
+ <welcome value='welcome.png'><smileycode value='*welcome*' /></welcome>
+ <whoswho value='whoswho.gif'><smileycode value='*whoswho*' /></whoswho>
+ <whoswho2 value='whoswho2.gif'><smileycode value='*whoswho2*' /></whoswho2>
+
+ <wink value='wink.png'>
+  <smileycode value=';)' />
+  <smileycode value=';-)' />
+  <smileycode value='*wink*' />
+ </wink>
+
+ <yawn value='yawn.gif'><smileycode value='*yawn*' /></yawn>
+
+</swg_smilies_file_v1>

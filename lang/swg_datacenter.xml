@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<swg_lang_file_v1>
+
+<datacenter>
+ <bytes><input input="string" value="" /></bytes>
+
+ <datalinker>
+  <sub>
+   <type>
+    <directory><input input="string" value="" /></directory>
+    <file><input input="string" value="" /></file>
+    <link><input input="string" value="" /></link>
+   </type>
+  </sub>
+ </datalinker>
+
+ <delete><input input="string" value="" /></delete>
+ <desc><input input="string" value="" /></desc>
+
+ <dir>
+  <input input="string" value="" />
+  <delete><input input="string" value="" /></delete>
+  <edit><input input="string" value="" /></edit>
+  <new><input input="string" value="" /></new>
+  <title><input input="string" value="" /></title>
+ </dir>
+
+ <done>
+
+  <dir>
+   <edit><input input="string" value="" /></edit>
+   <new><input input="string" value="" /></new>
+  </dir>
+
+  <file>
+   <new><input input="string" value="" /></new>
+   <replace><input input="string" value="" /></replace>
+  </file>
+
+  <link>
+   <new><input input="string" value="" /></new>
+   <replace><input input="string" value="" /></replace>
+  </link>
+
+  <object>
+   <delete><input input="string" value="" /></delete>
+   <edit><input input="string" value="" /></edit>
+  </object>
+
+ </done>
+
+ <download>
+  <input input="string" value="" />
+  <warning><input input="string" value="" /></warning>
+ </download>
+
+ <downloads><server>
+  <checking><input input="string" value="" /></checking>
+  <transfering><input input="string" value="" /></transfering>
+ </server></downloads>
+
+ <file>
+  <new><input input="string" value="" /></new>
+  <replace><input input="string" value="" /></replace>
+ </file>
+
+ <helper>
+
+  <dir><delete>
+
+   <input input="string" value="" />
+
+   <physical>
+    <input input="string" value="" />
+    <root><input input="string" value="" /></root>
+   </physical>
+
+  </delete></dir>
+
+  <mode>
+   <dir><input input="string" value="" /></dir>
+   <obj><input input="string" value="" /></obj>
+  </mode>
+
+  <trusted><input input="string" value="" /></trusted>
+ </helper>
+
+ <home>
+  <digitstart__1><input input="string" value="" /></digitstart__1>
+  <digitstart__2><input input="string" value="" /></digitstart__2>
+ </home>
+
+ <lastedit><input input="string" value="" /></lastedit>
+
+ <link>
+ 
+  <input input="string" value="" />
+  <new><input input="string" value="" /></new>
+
+  <redirect>
+   <cancel><input input="string" value="" /></cancel>
+   <cancelled><input input="string" value="" /></cancelled>
+  </redirect>
+
+  <replace><input input="string" value="" /></replace>
+  <title><input input="string" value="" /></title>
+  <url><input input="string" value="" /></url>
+  <warning><input input="string" value="" /></warning>
+ 
+ </link>
+
+ <list><empty><input input="string" value="" /></empty></list>
+
+ <mode>
+  <all><input input="string" value="" /></all>
+  <last><input input="string" value="" /></last>
+  <owner><input input="string" value="" /></owner>
+
+  <right>
+   <digitstart__0><input input="string" value="" /></digitstart__0>
+   <r><input input="string" value="" /></r>
+   <w><input input="string" value="" /></w>
+  </right>
+ </mode>
+
+ <object>
+  <input input="string" value="" />
+  <delete><input input="string" value="" /></delete>
+  <deleted><input input="string" value="" /></deleted>
+  <details><input input="string" value="" /></details>
+  <edit><input input="string" value="" /></edit>
+  <locked><input input="string" value="" /></locked>
+  <mark><input input="string" value="" /></mark>
+  <unmark><input input="string" value="" /></unmark>
+ </object>
+
+ <public><input input="string" value="" /></public>
+ <size><input input="string" value="" /></size>
+
+ <source>
+  <select><input input="string" value="" /></select>
+  <localside><input input="string" value="" /></localside>
+  <serverside><input input="string" value="" /></serverside>
+ </source>
+
+ <target><directory>
+  <input input="string" value="" />
+  <select><input input="string" value="" /></select>
+  <selected><input input="string" value="" /></selected>
+ </directory></target>
+
+ <tos>
+  <input input="string" value="" />
+  <accept><input input="string" value="" /></accept>
+ </tos>
+
+ <trusted><input input="string" value="" /></trusted>
+ <type><input input="string" value="" /></type>
+
+ <upload>
+  <completed><input input="string" value="" /></completed>
+
+  <failed>
+
+   <credits>
+    <digitstart__1><input input="string" value="" /></digitstart__1>
+    <digitstart__2><input input="string" value="" /></digitstart__2>
+   </credits>
+
+   <database><error><input input="string" value="" /></error></database>
+   <directory><error><input input="string" value="" /></error></directory>
+
+   <file>
+    <type><unsupported><input input="string" value="" /></unsupported></type>
+    <size><exceeds><limit><input input="string" value="" /></limit></exceeds></size>
+   </file>
+
+   <php><error>
+    <digitstart__1><input input="string" value="" /></digitstart__1>
+    <digitstart__2><input input="string" value="" /></digitstart__2>
+   </error></php>
+
+   <server><response><error>
+    <digitstart__1><input input="string" value="" /></digitstart__1>
+    <digitstart__2><input input="string" value="" /></digitstart__2>
+   </error></response></server>
+
+   <transfer><error><input input="string" value="" /></error></transfer>
+   <url><invalid><input input="string" value="" /></invalid></url>
+   <upload><exceeds><limit><input input="string" value="" /></limit></exceeds></upload>
+
+  </failed>
+
+  <fields><input input="string" value="" /></fields>
+
+  <files>
+   <digitstart__1><input input="string" value="" /></digitstart__1>
+   <digitstart__2><input input="string" value="" /></digitstart__2>
+   <digitstart__3><input input="string" value="" /></digitstart__3>
+  </files>
+
+  <limits>
+
+   <file>
+    <digitstart__1><input input="string" value="" /></digitstart__1>
+    <digitstart__2><input input="string" value="" /></digitstart__2>
+   </file>
+
+   <local>
+    <digitstart__1><input input="string" value="" /></digitstart__1>
+    <digitstart__2><input input="string" value="" /></digitstart__2>
+   </local>
+
+   <server>
+    <digitstart__1><input input="string" value="" /></digitstart__1>
+    <digitstart__2><input input="string" value="" /></digitstart__2>
+   </server>
+
+  </limits>
+
+ </upload>
+
+ <uploads><tos>
+  <input input="string" value="" />
+  <accept><input input="string" value="" /></accept>
+ </tos></uploads>
+
+</datacenter>
+
+<errors><datacenter>
+
+ <did><invalid><input input="string" value="" /></invalid></did>
+ <dir><delete><physical><input input="string" value="" /></physical></delete></dir>
+
+ <file>
+  <limit><reached><input input="string" value="" /></reached></limit>
+  <type><unsupported><input input="string" value="" /></unsupported></type>
+ </file>
+
+ <oid><invalid><input input="string" value="" /></invalid></oid>
+ <object><delete><physical><input input="string" value="" /></physical></delete></object>
+ <remote><access><failed><input input="string" value="" /></failed></access></remote>
+
+ <uploads><tos><required><input input="string" value="" /></required></tos></uploads>
+
+</datacenter></errors>
+
+</swg_lang_file_v1>
