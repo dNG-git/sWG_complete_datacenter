@@ -28,7 +28,6 @@ this program; if not, write to the Free Software Foundation, Inc.,
 ----------------------------------------------------------------------------
 http://www.direct-netware.de/redirect.php?licenses;gpl
 ----------------------------------------------------------------------------
-$Id: swg_uploads.php,v 1.1 2009/03/07 12:48:09 s4u Exp $
 #echo(sWGdatacenterVersion)#
 sWG/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------

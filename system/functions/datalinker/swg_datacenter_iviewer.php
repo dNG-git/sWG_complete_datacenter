@@ -28,7 +28,6 @@ this program; if not, write to the Free Software Foundation, Inc.,
 ----------------------------------------------------------------------------
 http://www.direct-netware.de/redirect.php?licenses;gpl
 ----------------------------------------------------------------------------
-$Id: swg_datacenter_iviewer.php,v 1.2 2009/03/03 09:03:58 s4u Exp $
 #echo(sWGdatacenterVersion)#
 sWG/#echo(__FILEPATH__)#
 ----------------------------------------------------------------------------
