@@ -86,18 +86,12 @@ function &direct_datalinker_datacenter (&$f_object)
 
 	if (is_object ($f_object))
 	{
-		$f_continue_check = $direct_classes['basic_functions']->settings_get ($direct_settings['path_data']."/settings/swg_datacenter.php");
-		$f_object_array = $f_object->get ();
+		$f_object_array = (($direct_classes['basic_functions']->settings_get ($direct_settings['path_data']."/settings/swg_datacenter.php")) ? $f_object->get () : NULL);
 
-		if (($f_object_array)&&($f_continue_check)&&(isset ($f_object_array['ddbdatalinker_id'])))
+		if (($f_object_array)&&(isset ($f_object_array['ddbdatalinker_id'])))
 		{
-			$f_continue_check = $direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/classes/dhandler/swg_datacenter.php");
-			if ($f_continue_check) { $f_return = new direct_datacenter (); }
-
-			if ($f_return)
-			{
-				if (!$f_return->get ($f_object_array['ddbdatalinker_id'])) { $f_return = false; }
-			}
+			if ($direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/classes/dhandler/swg_datacenter.php")) { $f_return = new direct_datacenter (); }
+			if (($f_return)&&(!$f_return->get ($f_object_array['ddbdatalinker_id']))) { $f_return = false; }
 		}
 	}
 

@@ -94,12 +94,8 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 <td valign='middle' align='center' class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding]'><span class='pagecontent'>");
 
 		if ($f_object['icon']) { $f_return .= "<img src='{$f_object['icon']}' border='0' alt='' title='' /><br />"; }
-
-		if (strlen ($f_object['title_alt'])) { $f_object_title = $f_object['title_alt']; }
-		else { $f_object_title = $f_object['title']; }
-
-		if (($f_object['dir'])&&($f_object['pageurl'])) { $f_return .= "<a href=\"{$f_object['pageurl']}\" target='_self'>$f_object_title</a>"; }
-		else { $f_return .= $f_object_title; }
+		$f_object_title = ((strlen ($f_object['title_alt'])) ? $f_object['title_alt'] : $f_object['title']);
+		$f_return .= ((($f_object['dir'])&&($f_object['pageurl'])) ? "<a href=\"{$f_object['pageurl']}\" target='_self'>$f_object_title</a>" : $f_object_title);
 
 $f_return .= ("</span></td>
 </tr><tr>
@@ -164,33 +160,20 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 
 		foreach ($f_objects as $f_object_array)
 		{
-			if ($f_object_array['marked']) { $f_css_class = "extra"; }
-			else { $f_css_class = ""; }
+			$f_css_class = ($f_object_array['marked'] ? "extra" : "");
 
 $f_return .= ("<tr>
 <td valign='middle' align='left' class='page{$f_css_class}bg' style='width:60%;padding:$direct_settings[theme_td_padding]'><a id=\"{$f_object_array['id']}\" name=\"{$f_object_array['id']}\"></a><span class='page{$f_css_class}content'>");
 
 			if ($f_object_array['icon']) { $f_return .= "<img src='{$f_object_array['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
-
-			if (($direct_settings['datacenter_marker_use_imagebuttons'])&&($f_object_array['pageurl_marker']))
-			{
-				if ($f_object_array['marked']) { $f_return .= "<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+data/themes/$direct_settings[theme]/mini_datacenter_object_unmark.png",true,false))."' border='0' alt='' title='' style='float:left' /></a>"; }
-				else { $f_return .= "<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+data/themes/$direct_settings[theme]/mini_datacenter_object_mark.png",true,false))."' border='0' alt='' title='' style='float:left' /></a>"; }
-			}
-
-			if (strlen ($f_object_array['title_alt'])) { $f_object_title = $f_object_array['title_alt']; }
-			else { $f_object_title = $f_object_array['title']; }
+			if (($direct_settings['datacenter_marker_use_imagebuttons'])&&($f_object_array['pageurl_marker'])) { $f_return .= ($f_object_array['marked'] ? "<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+data/themes/$direct_settings[theme]/mini_datacenter_object_unmark.png",true,false))."' border='0' alt='' title='' style='float:left' /></a>" : "<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+data/themes/$direct_settings[theme]/mini_datacenter_object_mark.png",true,false))."' border='0' alt='' title='' style='float:left' /></a>"); }
+			$f_object_title = ((strlen ($f_object_array['title_alt'])) ? $f_object_array['title_alt'] : $f_object_array['title']);
 
 			if (($f_link_files)&&($f_object_array['pageurl'])) { $f_return .= "<span style='font-weight:bold'><a href=\"{$f_object_array['pageurl']}\" target='_self'>$f_object_title</a></span>"; }
-			else
-			{
-				if (($f_object_array['pageurl'])&&($f_object_array['dir'])) { $f_return .= "<span style='font-weight:bold'><a href=\"{$f_object_array['pageurl']}\" target='_self'>$f_object_title</a></span>"; }
-				else { $f_return .= "<span style='font-weight:bold'>$f_object_title</span>"; }
-			}
+			else { $f_return .= ((($f_object_array['pageurl'])&&($f_object_array['dir'])) ? "<span style='font-weight:bold'><a href=\"{$f_object_array['pageurl']}\" target='_self'>$f_object_title</a></span>" : "<span style='font-weight:bold'>$f_object_title</span>"); }
 
 			if ($f_object_array['type']) { $f_return .= " <span style='font-size:10px'>({$f_object_array['type']})</span>"; }
 			if ((!$direct_settings['datacenter_marker_use_imagebuttons'])&&($f_object_array['pageurl_marker'])) { $f_return .= " <span style='font-size:10px'>(<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'>{$f_object_array['marker_title']}</a>)</span>"; }
-
 			if ($f_object_array['desc']) { $f_return .= "<br />\n<span style='font-size:10px'>{$f_object_array['desc']}</span>"; }
 
 $f_return .= ("</span></td>
@@ -232,8 +215,7 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 
 		foreach ($f_objects as $f_object_array)
 		{
-			if ($f_object_array['marked']) { $f_css_class = "extra"; }
-			else { $f_css_class = ""; }
+			$f_css_class = ($f_object_array['marked'] ? "extra" : "");
 
 			if (isset ($f_right_switch))
 			{
@@ -256,8 +238,7 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 
 			$f_return .= "<a id=\"{$f_object_array['id']}\" name=\"{$f_object_array['id']}\"></a><span class='page{$f_css_class}content'>";
 
-			if (strlen ($f_object_array['title_alt'])) { $f_object_title = $f_object_array['title_alt']; }
-			else { $f_object_title = $f_object_array['title']; }
+			$f_object_title = ((strlen ($f_object_array['title_alt'])) ? $f_object_array['title_alt'] : $f_object_array['title']);
 
 			if (($f_object_array['type'] == "image/gif")||($f_object_array['type'] == "image/jpeg")||($f_object_array['type'] == "image/png")||($f_object_array['type'] == "image/svg+xml")) { $f_return .= "<img src='{$f_object_array['icon']}' border='0' alt=\"$f_object_title\" title=\"$f_object_title\" />"; }
 			else
@@ -271,8 +252,7 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 			$f_return .= "<br />\n<span style='font-size:10px'><a href=\"{$f_object_array['pageurl_marker']}\" target='_self'>{$f_object_array['marker_title']}</a></span></span>";
 		}
 
-		if ($f_right_switch) { $f_return .= "</td>\n<td class='page{$f_css_class}bg' style='width:50%'><span style='font-size:8px'>&#0160;</span></td>\n</tr></tbody>\n</table>"; }
-		else { $f_return .= "</td>\n</tr></tbody>\n</table>"; }
+		$f_return .= ($f_right_switch ? "</td>\n<td class='page{$f_css_class}bg' style='width:50%'><span style='font-size:8px'>&#0160;</span></td>\n</tr></tbody>\n</table>" : "</td>\n</tr></tbody>\n</table>");
 	}
 
 	return $f_return;

@@ -83,9 +83,7 @@ switch ($direct_settings['a'])
 case "new":
 case "new-save":
 {
-	if ($direct_settings['a'] == "new-save") { $g_mode_save = true; }
-	else { $g_mode_save = false; }
-
+	$g_mode_save = (($direct_settings['a'] == "new-save") ? true : false);
 	if (USE_debug_reporting) { direct_debug (1,"sWG/#echo(__FILEPATH__)# _a={$direct_settings['a']}_ (#echo(__LINE__)#)"); }
 
 	$g_tid = (isset ($direct_settings['dsd']['tid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['tid'])) : "");
@@ -112,9 +110,12 @@ case "new-save":
 	{
 	//j// BOA
 	if ($g_mode_save) { direct_output_related_manager ("datalinker_subs_datacenter_new_form_save","pre_module_service_action"); }
-	else { direct_output_related_manager ("datalinker_subs_datacenter_new_form","pre_module_service_action"); }
+	else
+	{
+		direct_output_related_manager ("datalinker_subs_datacenter_new_form","pre_module_service_action");
+		$direct_classes['kernel']->service_https ($direct_settings['datalinker_https_subs_new'],$direct_cachedata['page_this']);
+	}
 
-	if (!$g_mode_save) { $direct_classes['kernel']->service_https ($direct_settings['datalinker_https_subs_new'],$direct_cachedata['page_this']); }
 	direct_local_integration ("datalinker");
 
 	$g_continue_check = $direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/functions/swg_tmp_storager.php");
@@ -325,9 +326,7 @@ case "new-selected":
 case "select":
 case "select-save":
 {
-	if ($direct_settings['a'] == "select-save") { $g_mode_save = true; }
-	else { $g_mode_save = false; }
-
+	$g_mode_save = (($direct_settings['a'] == "select-save") ? true : false);
 	if (USE_debug_reporting) { direct_debug (1,"sWG/#echo(__FILEPATH__)# _a={$direct_settings['a']}_ (#echo(__LINE__)#)"); }
 
 	$g_tid = (isset ($direct_settings['dsd']['tid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['tid'])) : "");
@@ -353,9 +352,12 @@ case "select-save":
 	{
 	//j// BOA
 	if ($g_mode_save) { direct_output_related_manager ("datalinker_subs_datacenter_select_form_save","pre_module_service_action"); }
-	else { direct_output_related_manager ("datalinker_subs_datacenter_select_form","pre_module_service_action"); }
+	else
+	{
+		direct_output_related_manager ("datalinker_subs_datacenter_select_form","pre_module_service_action");
+		$direct_classes['kernel']->service_https ($direct_settings['datalinker_https_subs_new'],$direct_cachedata['page_this']);
+	}
 
-	if (!$g_mode_save) { $direct_classes['kernel']->service_https ($direct_settings['datalinker_https_subs_new'],$direct_cachedata['page_this']); }
 	direct_local_integration ("datalinker");
 
 	$g_continue_check = $direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/functions/swg_tmp_storager.php");

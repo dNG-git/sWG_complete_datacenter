@@ -106,11 +106,8 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 		$f_return .= "\n<td valign='middle' align='center' class='pagebg' style='width:50%;padding:$direct_settings[theme_td_padding]'><span class='pagecontent'>";
 		if ($direct_cachedata['output_dir']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir']['icon']}' border='0' alt='' title='' /><br />\n"; }
 
-		if (strlen ($direct_cachedata['output_dir']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir']['title_alt']; }
-		else { $f_dir_title = $direct_cachedata['output_dir']['title']; }
-
-		if ($direct_cachedata['output_dir']['pageurl']) { $f_return .= "<span style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir']['pageurl']}\" target='_self'>$f_dir_title</a></span>"; }
-		else { $f_return .= "<span style='font-weight:bold'>$f_dir_title</span>"; }
+		$f_dir_title = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? $direct_cachedata['output_dir']['title_alt'] : $direct_cachedata['output_dir']['title']);
+		$f_return .= ($direct_cachedata['output_dir']['pageurl'] ? "<span style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir']['pageurl']}\" target='_self'>$f_dir_title</a></span>" : "<span style='font-weight:bold'>$f_dir_title</span>");
 
 		if ($direct_cachedata['output_dir']['desc']) { $f_return .= "<br />\n<span style='font-size:10px'>{$direct_cachedata['output_dir']['desc']}</span>"; }
 		$f_return .= "</span></td>";
@@ -147,9 +144,7 @@ function direct_output_oset_datacenter_media_list ()
 
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/osets/$direct_settings[theme_oset]/swgi_datacenter.php");
 
-	if (strlen ($direct_cachedata['output_dir']['title_alt'])) { $f_return = "<p class='pagecontenttitle'>{$direct_cachedata['output_dir']['title_alt']}</p>"; }
-	else { $f_return = "<p class='pagecontenttitle'>{$direct_cachedata['output_dir']['title']}</p>"; }
-
+	$f_return = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? "<p class='pagecontenttitle'>{$direct_cachedata['output_dir']['title_alt']}</p>" : "<p class='pagecontenttitle'>{$direct_cachedata['output_dir']['title']}</p>");
 	if ($direct_cachedata['output_dir']['desc']) { $f_return .= "\n<p class='pagecontent'>{$direct_cachedata['output_dir']['desc']}</p>"; }
 
 	if (isset ($direct_cachedata['output_dir_levelup']))
@@ -157,11 +152,8 @@ function direct_output_oset_datacenter_media_list ()
 		$f_return .= "\n<p class='pageborder2' style='text-align:left'>";
 		if ($direct_cachedata['output_dir_levelup']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir_levelup']['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
 
-		if (strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) { $f_dir_levelup_title = $direct_cachedata['output_dir_levelup']['title_alt']; }
-		else { $f_dir_levelup_title = $direct_cachedata['output_dir_levelup']['title']; }
-
-		if ($direct_cachedata['output_dir_levelup']['pageurl']) { $f_return .= "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_levelup_title</a></span>"; }
-		else { $f_return .= "<span class='pageextracontent' style='font-weight:bold'>$f_dir_levelup_title</span>"; }
+		$f_dir_levelup_title = ((strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) ? $direct_cachedata['output_dir_levelup']['title_alt'] : $direct_cachedata['output_dir_levelup']['title']);
+		$f_return .= ($direct_cachedata['output_dir_levelup']['pageurl'] ? "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_levelup_title</a></span>" : "<span class='pageextracontent' style='font-weight:bold'>$f_dir_levelup_title</span>");
 
 		if ($direct_cachedata['output_dir_levelup']['desc']) { $f_return .= "<br />\n<span class='pageextracontent' style='font-size:10px'>{$direct_cachedata['output_dir_levelup']['desc']}</span>"; }
 		$f_return .= "</p>";

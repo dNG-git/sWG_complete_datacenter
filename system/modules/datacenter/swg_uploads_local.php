@@ -82,9 +82,7 @@ switch ($direct_settings['a'])
 case "files":
 case "files-save":
 {
-	if ($direct_settings['a'] == "files-save") { $g_mode_save = true; }
-	else { $g_mode_save = false; }
-
+	$g_mode_save = (($direct_settings['a'] == "files-save") ? true : false);
 	if (USE_debug_reporting) { direct_debug (1,"sWG/#echo(__FILEPATH__)# _a={$direct_settings['a']}_ (#echo(__LINE__)#)"); }
 
 	$g_tid = (isset ($direct_settings['dsd']['tid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['tid'])) : "");
@@ -143,13 +141,9 @@ case "files-save":
 		direct_class_init ("formbuilder");
 		$direct_classes['output']->servicemenu ("datacenter_upload");
 
-		if (((isset ($g_task_array['datacenter_upload_only']))&&($g_task_array['datacenter_upload_only']))||((isset ($g_task_array['datacenter_upload_mode_physical']))&&($g_task_array['datacenter_upload_mode_physical']))) { $g_upload_check = true; }
-		else { $g_upload_check = false; }
-
-		if ($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) { $g_rights_check = true; }
-		else { $g_rights_check = false; }
-
 		$direct_cachedata['i_dfiles'] = "";
+		$g_rights_check = (($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) ? true : false);
+		$g_upload_check = ((((isset ($g_task_array['datacenter_upload_only']))&&($g_task_array['datacenter_upload_only']))||((isset ($g_task_array['datacenter_upload_mode_physical']))&&($g_task_array['datacenter_upload_mode_physical']))) ? true : false);
 
 		for ($g_i = 0;$g_i < $g_task_array['datacenter_upload_target_quantity'];$g_i++)
 		{
@@ -172,17 +166,14 @@ Build the form
 Save data edited
 ------------------------------------------------------------------------- */
 
-			if (strpos ($g_task_array['datacenter_upload_target_did'],"-") === false) { $g_datacenter_object = new direct_datacenter (); }
-			else { $g_datacenter_object = new direct_datacenter_home (); }
+			$g_datacenter_object = ((strpos ($g_task_array['datacenter_upload_target_did'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 
-			if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_task_array['datacenter_upload_target_did']); }
-			else { $g_datacenter_array = NULL; }
+			$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_task_array['datacenter_upload_target_did']) : NULL);
 
 			if ((is_array ($g_datacenter_array))&&($g_datacenter_object->is_directory ())&&($g_datacenter_object->is_writable ())) { $g_result_array = array (); }
 			else { $g_result_array = array ("*" => array ("name" => "*","error" => "access_denied")); }
 
-			if ((isset ($g_task_array['datacenter_upload_mode_physical']))&&($g_task_array['datacenter_upload_mode_physical'])) { $g_upload_dirname_length = 0; }
-			else { $g_upload_dirname_length = $g_task_array['datacenter_upload_dirname_length']; }
+			$g_upload_dirname_length = (((isset ($g_task_array['datacenter_upload_mode_physical']))&&($g_task_array['datacenter_upload_mode_physical'])) ? 0 : $g_task_array['datacenter_upload_dirname_length']);
 
 			if (empty ($g_result_array)) { $g_upload_directory = direct_datacenter_uploads_prepare ($g_datacenter_object,$g_result_array,$g_task_array['datacenter_upload_path'],$g_upload_dirname_length); }
 			$g_files = direct_datacenter_uploads_local_check ($_FILES,$g_task_array['datacenter_upload_target_quantity'],$g_result_array);
@@ -209,9 +200,7 @@ View form
 
 			$direct_cachedata['output_formbutton'] = direct_local_get ("core_save");
 			$direct_cachedata['output_formtarget'] = "m=datacenter&s=uploads_local&a=files-save&dsd=tid+".$g_tid;
-
-			if ((isset ($g_task_array['datacenter_upload_overwrite_title']))&&($g_task_array['datacenter_upload_overwrite_title'])) { $direct_cachedata['output_formtitle'] = $g_task_array['datacenter_upload_overwrite_title']; }
-			else { $direct_cachedata['output_formtitle'] = direct_local_get ("datacenter_source_localside"); }
+			$direct_cachedata['output_formtitle'] = (((isset ($g_task_array['datacenter_upload_overwrite_title']))&&($g_task_array['datacenter_upload_overwrite_title'])) ? $g_task_array['datacenter_upload_overwrite_title'] : direct_local_get ("datacenter_source_localside"));
 
 			direct_output_related_manager ("datacenter_uploads_local_files_form","post_module_service_action");
 			$direct_classes['output']->oset ("default","form");

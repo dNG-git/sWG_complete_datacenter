@@ -82,12 +82,11 @@ function direct_output_oset_datacenter_embedded_ajax_selector ()
 
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/osets/$direct_settings[theme_oset]/swgi_datacenter.php");
 
-	if (strlen ($direct_cachedata['output_dir']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir']['title_alt']; }
-	else { $f_dir_title = $direct_cachedata['output_dir']['title']; }
+	$f_dir_title = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? $direct_cachedata['output_dir']['title_alt'] : $direct_cachedata['output_dir']['title']);
 
-	if ($direct_cachedata['output_dir']['marked']) { $f_return = "<div id='swgAJAX_datacenter_selector_{$direct_cachedata['output_tid']}_point' style='text-align:left'><p class='pagecontenttitle'>$f_dir_title (".(direct_local_get ("datacenter_target_directory_selected")).")</p>"; }
-	else { $f_return = "<div id='swgAJAX_datacenter_selector_{$direct_cachedata['output_tid']}_point' style='text-align:left'><p class='pagecontenttitle'>$f_dir_title</p>"; }
-
+	$f_return = "<div id='swgAJAX_datacenter_selector_{$direct_cachedata['output_tid']}_point' style='text-align:left'><p class='pagecontenttitle'>";
+	$f_return .= ($direct_cachedata['output_dir']['marked'] ? $f_dir_title." (".(direct_local_get ("datacenter_target_directory_selected")).")" : $f_dir_title);
+	$f_return .= "</p>";
 	if (strlen ($direct_cachedata['output_dir']['desc'])) { $f_return .= "\n<p class='pagecontent'>{$direct_cachedata['output_dir']['desc']}</p>"; }
 
 	if (isset ($direct_cachedata['output_dir_levelup']))
@@ -95,11 +94,8 @@ function direct_output_oset_datacenter_embedded_ajax_selector ()
 		$f_return .= "<p class='pageborder2' style='text-align:left'>";
 		if ($direct_cachedata['output_dir_levelup']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir_levelup']['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
 
-		if (strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir_levelup']['title_alt']; }
-		else { $f_dir_title = $direct_cachedata['output_dir_levelup']['title']; }
-
-		if ($direct_cachedata['output_dir_levelup']['pageurl']) { $f_return .= "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>"; }
-		else { $f_return .= "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>"; }
+		$f_dir_title = ((strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) ? $direct_cachedata['output_dir_levelup']['title_alt'] : $direct_cachedata['output_dir_levelup']['title']);
+		$f_return .= ($direct_cachedata['output_dir_levelup']['pageurl'] ? "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>" : "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>");
 
 		if ($direct_cachedata['output_dir_levelup']['desc']) { $f_return .= "<br />\n<span class='pageextracontent' style='font-size:10px'>{$direct_cachedata['output_dir_levelup']['desc']}</span>"; }
 		$f_return .= "</p>";
@@ -132,12 +128,11 @@ function direct_output_oset_datacenter_embedded_ajax_selector_icons ()
 
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/osets/$direct_settings[theme_oset]/swgi_datacenter.php");
 
-	if (strlen ($direct_cachedata['output_dir']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir']['title_alt']; }
-	else { $f_dir_title = $direct_cachedata['output_dir']['title']; }
+	$f_dir_title = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? $direct_cachedata['output_dir']['title_alt'] : $direct_cachedata['output_dir']['title']);
 
-	if ($direct_cachedata['output_dir']['marked']) { $f_return = "<div id='swgAJAX_datacenter_selector_icons_{$direct_cachedata['output_tid']}_point' style='text-align:left'><p class='pagecontenttitle'>$f_dir_title (".(direct_local_get ("datacenter_target_directory_selected")).")</p>"; }
-	else { $f_return = "<div id='swgAJAX_datacenter_selector_icons_{$direct_cachedata['output_tid']}_point' style='text-align:left'><p class='pagecontenttitle'>$f_dir_title</p>"; }
-
+	$f_return = "<div id='swgAJAX_datacenter_selector_icons_{$direct_cachedata['output_tid']}_point' style='text-align:left'><p class='pagecontenttitle'>";
+	$f_return .= ($direct_cachedata['output_dir']['marked'] ? $f_dir_title." (".(direct_local_get ("datacenter_target_directory_selected")).")" : $f_dir_title);
+	$f_return .= "</p>";
 	if ($direct_cachedata['output_dir']['desc']) { $f_return .= "\n<p class='pagecontent'>{$direct_cachedata['output_dir']['desc']}</p>"; }
 
 	if (isset ($direct_cachedata['output_dir_levelup']))
@@ -145,11 +140,8 @@ function direct_output_oset_datacenter_embedded_ajax_selector_icons ()
 		$f_return .= "<p class='pageborder2' style='text-align:left'>";
 		if ($direct_cachedata['output_dir_levelup']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir_levelup']['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
 
-		if (strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir_levelup']['title_alt']; }
-		else { $f_dir_title = $direct_cachedata['output_dir_levelup']['title']; }
-
-		if ($direct_cachedata['output_dir_levelup']['pageurl']) { $f_return .= "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>"; }
-		else { $f_return .= "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>"; }
+		$f_dir_title = ((strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) ? $direct_cachedata['output_dir_levelup']['title_alt'] : $direct_cachedata['output_dir_levelup']['title']);
+		$f_return .= ($direct_cachedata['output_dir_levelup']['pageurl'] ? "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>" : "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>");
 
 		if ($direct_cachedata['output_dir_levelup']['desc']) { $f_return .= "<br />\n<span class='pageextracontent' style='font-size:10px'>{$direct_cachedata['output_dir_levelup']['desc']}</span>"; }
 		$f_return .= "</p>";
@@ -182,12 +174,8 @@ function direct_output_oset_datacenter_embedded_selector ()
 
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/osets/$direct_settings[theme_oset]/swgi_datacenter.php");
 
-	if (strlen ($direct_cachedata['output_dir']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir']['title_alt']; }
-	else { $f_dir_title = $direct_cachedata['output_dir']['title']; }
-
-	if ($direct_cachedata['output_dir']['marked']) { $f_return = "<p class='pagecontenttitle'>$f_dir_title (".(direct_local_get ("datacenter_target_directory_selected")).")</p>"; }
-	else { $f_return = "<p class='pagecontenttitle'>$f_dir_title</p>"; }
-
+	$f_dir_title = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? $direct_cachedata['output_dir']['title_alt'] : $direct_cachedata['output_dir']['title']);
+	$f_return = ($direct_cachedata['output_dir']['marked'] ? "<p class='pagecontenttitle'>$f_dir_title (".(direct_local_get ("datacenter_target_directory_selected")).")</p>" : "<p class='pagecontenttitle'>$f_dir_title</p>");
 	if ($direct_cachedata['output_dir']['desc']) { $f_return .= "\n<p class='pagecontent'>{$direct_cachedata['output_dir']['desc']}</p>"; }
 
 	if (isset ($direct_cachedata['output_dir_levelup']))
@@ -195,11 +183,8 @@ function direct_output_oset_datacenter_embedded_selector ()
 		$f_return .= "<p class='pageborder2' style='text-align:left'>";
 		if ($direct_cachedata['output_dir_levelup']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir_levelup']['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
 
-		if (strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir_levelup']['title_alt']; }
-		else { $f_dir_title = $direct_cachedata['output_dir_levelup']['title']; }
-
-		if ($direct_cachedata['output_dir_levelup']['pageurl']) { $f_return .= "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\">$f_dir_title</a></span>"; }
-		else { $f_return .= "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>"; }
+		$f_dir_title = ((strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) ? $direct_cachedata['output_dir_levelup']['title_alt'] : $direct_cachedata['output_dir_levelup']['title']);
+		$f_return .= ($direct_cachedata['output_dir_levelup']['pageurl'] ? "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>" : "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>");
 
 		if ($direct_cachedata['output_dir_levelup']['desc']) { $f_return .= "<br />\n<span class='pageextracontent' style='font-size:10px'>{$direct_cachedata['output_dir_levelup']['desc']}</span>"; }
 		$f_return .= "</p>";
@@ -232,12 +217,8 @@ function direct_output_oset_datacenter_embedded_selector_icons ()
 
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/osets/$direct_settings[theme_oset]/swgi_datacenter.php");
 
-	if (strlen ($direct_cachedata['output_dir']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir']['title_alt']; }
-	else { $f_dir_title = $direct_cachedata['output_dir']['title']; }
-
-	if ($direct_cachedata['output_dir']['marked']) { $f_return = "<p class='pagecontenttitle'>$f_dir_title (".(direct_local_get ("datacenter_target_directory_selected")).")</p>"; }
-	else { $f_return = "<p class='pagecontenttitle'>$f_dir_title</p>"; }
-
+	$f_dir_title = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? $direct_cachedata['output_dir']['title_alt'] : $direct_cachedata['output_dir']['title']);
+	$f_return = ($direct_cachedata['output_dir']['marked'] ? "<p class='pagecontenttitle'>$f_dir_title (".(direct_local_get ("datacenter_target_directory_selected")).")</p>" : "<p class='pagecontenttitle'>$f_dir_title</p>");
 	if ($direct_cachedata['output_dir']['desc']) { $f_return .= "\n<p class='pagecontent'>{$direct_cachedata['output_dir']['desc']}</p>"; }
 
 	if (isset ($direct_cachedata['output_dir_levelup']))
@@ -245,11 +226,8 @@ function direct_output_oset_datacenter_embedded_selector_icons ()
 		$f_return .= "<p class='pageborder2' style='text-align:left'>";
 		if ($direct_cachedata['output_dir_levelup']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir_levelup']['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
 
-		if (strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) { $f_dir_title = $direct_cachedata['output_dir_levelup']['title_alt']; }
-		else { $f_dir_title = $direct_cachedata['output_dir_levelup']['title']; }
-
-		if ($direct_cachedata['output_dir_levelup']['pageurl']) { $f_return .= "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>"; }
-		else { $f_return .= "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>"; }
+		$f_dir_title = ((strlen ($direct_cachedata['output_dir_levelup']['title_alt'])) ? $direct_cachedata['output_dir_levelup']['title_alt'] : $direct_cachedata['output_dir_levelup']['title']);
+		$f_return .= ($direct_cachedata['output_dir_levelup']['pageurl'] ? "<span class='pageextracontent' style='font-weight:bold'><a href=\"{$direct_cachedata['output_dir_levelup']['pageurl']}\" target='_self'>$f_dir_title</a></span>" : "<span class='pageextracontent' style='font-weight:bold'>$f_dir_title</span>");
 
 		if ($direct_cachedata['output_dir_levelup']['desc']) { $f_return .= "<br />\n<span class='pageextracontent' style='font-size:10px'>{$direct_cachedata['output_dir_levelup']['desc']}</span>"; }
 		$f_return .= "</p>";

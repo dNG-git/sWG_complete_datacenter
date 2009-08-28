@@ -85,13 +85,10 @@ function direct_datacenter_uploads_filters_get ()
 	{
 		$f_return = array ();
 
-		if (file_exists ($direct_settings['path_data']."/settings/swg_datacenter_filters.xml")) { $f_file_data = $direct_classes['basic_functions']->memcache_get_file ($direct_settings['path_data']."/settings/swg_datacenter_filters.xml"); }
-		else { $f_file_data = NULL; }
+		$f_file_data = ((file_exists ($direct_settings['path_data']."/settings/swg_datacenter_filters.xml")) ? $direct_classes['basic_functions']->memcache_get_file ($direct_settings['path_data']."/settings/swg_datacenter_filters.xml") : NULL);
+		$f_xml_array = ($f_file_data ? $direct_classes['xml_bridge']->xml2array ($f_file_data,true,false) : NULL);
 
-		if ($f_file_data) { $f_xml_array = $direct_classes['xml_bridge']->xml2array ($f_file_data,true,false); }
-		else { $f_xml_array = NULL; }
-
-		if ($f_xml_array)
+		if (is_array ($f_xml_array))
 		{
 			if (isset ($f_xml_array['swg_datacenter_filters_file_v1']['xml.item']))
 			{
@@ -211,9 +208,7 @@ mimetype.
 				if ((!isset ($f_file_array['type']))||(!$f_file_array['type'])||($f_file_array['type'] == "application/octet-stream"))
 				{
 					$f_path_array = pathinfo ($f_file['name']);
-
-					if (isset ($f_path_array['extension'])) { $f_file_array['type'] = $direct_classes['basic_functions']->mimetype_extension ($f_path_array['extension']); }
-					else { $f_file_array['type'] = "text/x-unknown"; }
+					$f_file_array['type'] = ((isset ($f_path_array['extension'])) ? $direct_classes['basic_functions']->mimetype_extension ($f_path_array['extension']) : "text/x-unknown");
 				}
 
 				if ((isset ($f_file_array['size']))&&($f_file_size != $f_file_array['size']))
@@ -339,14 +334,9 @@ function direct_datacenter_uploads_save ($f_files,&$f_result_array,$f_task_array
 	$f_total_credits_onetime = 0;
 	$f_upload_path = preg_replace ("#[\/]+$#","",($direct_classes['basic_functions']->inputfilter_filepath ($f_task_array['datacenter_upload_path'],true)));
 
-	if ((!isset ($f_task_array['datacenter_upload_limit_relevant']))||($f_task_array['datacenter_upload_limit_relevant'])) { $f_limit_relevant_check = true; }
-	else { $f_limit_relevant_check = false; }
-
-	if ((isset ($f_task_array['datacenter_upload_mode_physical']))&&($f_task_array['datacenter_upload_mode_physical'])) { $f_physical_check = true; }
-	else { $f_physical_check = false; }
-
-	if ((isset ($f_task_array['datacenter_upload_only']))&&($f_task_array['datacenter_upload_only'])) { $f_upload_check = true; }
-	else { $f_upload_check = false; }
+	$f_limit_relevant_check = (((!isset ($f_task_array['datacenter_upload_limit_relevant']))||($f_task_array['datacenter_upload_limit_relevant'])) ? true : false);
+	$f_physical_check = (((isset ($f_task_array['datacenter_upload_mode_physical']))&&($f_task_array['datacenter_upload_mode_physical'])) ? true : false);
+	$f_upload_check = (((isset ($f_task_array['datacenter_upload_only']))&&($f_task_array['datacenter_upload_only'])) ? true : false);
 
 	if (strlen ($f_upload_directory)) { $f_upload_directory .= "/"; }
 	if (strlen ($f_upload_path)) { $f_upload_path .= "/"; }
@@ -558,17 +548,13 @@ function direct_datacenter_uploads_server_definition_check ($f_quantity,&$f_resu
 					}
 
 					$f_url_server .= $f_url_array['host'];
-
-					if (isset ($f_url_array['port'])) { $f_url_port = $f_url_array['port']; }
-					else { $f_url_port = 80; }
+					$f_url_port = ((isset ($f_url_array['port'])) ? $f_url_array['port'] : 80);
 
 					if (isset ($f_url_array['path']))
 					{
 						$f_path_array = pathinfo ($f_url_array['path']);
 						$f_url_path = $f_url_array['path'];
-
-						if (($f_path_array)&&(isset ($f_path_array['basename']))&&(strlen ($f_path_array['basename']))) { $f_file_array['name'] = $f_path_array['basename']; }
-						else { $f_file_array['name'] = uniqid ("swg_"); }
+						$f_file_array['name'] = ((($f_path_array)&&(isset ($f_path_array['basename']))&&(strlen ($f_path_array['basename']))) ? $f_path_array['basename'] : uniqid ("swg_"));
 					}
 					else { $f_url_path = "/"; }
 
@@ -639,9 +625,7 @@ function direct_datacenter_uploads_server_download (&$f_task_array,$f_upload_dir
 		if (!$f_bytes_unread)
 		{
 			$f_download_array = array_shift ($f_task_array['datacenter_upload_downloads']);
-
-			if (isset ($f_download_array['size_completed'])) { $f_download_array['size_completed'] = (int)$f_download_array['size_completed']; }
-			else { $f_download_array['size_completed'] = 0; }
+			$f_download_array['size_completed'] = ((isset ($f_download_array['size_completed'])) ? (int)$f_download_array['size_completed'] : 0);
 
 			if (isset ($f_download_array['size_unread'])) { $f_download_array['size_unread'] = (int)$f_download_array['size_unread']; }
 			else
@@ -671,9 +655,7 @@ function direct_datacenter_uploads_server_download (&$f_task_array,$f_upload_dir
 			}
 			else
 			{
-				if ($f_bytes_unread > 4096) { $f_part_size = 4096; }
-				else { $f_part_size = $f_bytes_unread; }
-
+				$f_part_size = (($f_bytes_unread > 4096) ? 4096 : $f_bytes_unread);
 				$f_file_data = $direct_classes['web_functions']->http_range ($f_download_array['server'],$f_download_array['port'],$f_download_array['path'],$f_download_array['data'],$f_download_array['size_completed'],($f_download_array['size_completed'] + $f_part_size));
 				$f_request_result_code = $direct_classes['web_functions']->get_result_code ();
 

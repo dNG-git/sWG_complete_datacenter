@@ -94,8 +94,7 @@ case "transfer_dl":
 		$g_datacenter_object = new direct_datacenter ();
 		$g_header_check = true;
 
-		if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-		else { $g_datacenter_array = NULL; }
+		$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_oid) : NULL);
 
 		if (!is_array ($g_datacenter_array)) { header ("HTTP/1.1 404 Not Found"); }
 		elseif ($g_datacenter_object->is_readable ())
@@ -193,16 +192,13 @@ We are working with offsets. Calculate the correct sSize to be read.
 					{
 						do
 						{
-							if ($g_bytes_unread > 4096) { $g_part_size = 4096; }
-							else { $g_part_size = $g_bytes_unread; }
-
+							$g_part_size = (($g_bytes_unread > 4096) ? 4096 : $g_bytes_unread);
 							echo $g_file_object->read ($g_part_size);
 							$g_bytes_unread -= $g_part_size;
 						}
 						while (($g_bytes_unread > 0)&&(!$g_file_object->eof_check ())&&($g_timeout_time > (time ())));
 
-						if ($g_bytes_unread > 0) { $g_eof_check = false; }
-						else { $g_eof_check = true; }
+						$g_eof_check = (($g_bytes_unread > 0) ? false : true);
 					}
 					else
 					{

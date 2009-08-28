@@ -70,7 +70,7 @@ if (!isset ($direct_settings['datacenter_https_control_objects'])) { $direct_set
 if (!isset ($direct_settings['datacenter_link_size'])) { $direct_settings['datacenter_link_size'] = 4096; }
 if (!isset ($direct_settings['datacenter_upload_links_allowed'])) { $direct_settings['datacenter_upload_links_allowed'] = true; }
 if (!isset ($direct_settings['datacenter_uploads_mods_support'])) { $direct_settings['datacenter_uploads_mods_support'] = false; }
-if (!isset ($direct_settings['formtags_overview_document_url'])) { $direct_settings['formtags_overview_document_url'] = "m=contentor&s=handbooks&a=view&dsd=cdid+dng_{$direct_settings['lang']}_2_90000000001"; }
+if (!isset ($direct_settings['formtags_overview_document_url'])) { $direct_settings['formtags_overview_document_url'] = "m=contentor&a=view&dsd=cdid+dng_{$direct_settings['lang']}_2_90000000001"; }
 if (!isset ($direct_settings['serviceicon_datacenter_link_replace'])) { $direct_settings['serviceicon_datacenter_link_replace'] = "mini_default_option.png"; }
 if (!isset ($direct_settings['serviceicon_default_back'])) { $direct_settings['serviceicon_default_back'] = "mini_default_back.png"; }
 $direct_settings['additional_copyright'][] = array ("Module datacenter #echo(sWGdatacenterVersion)# - (C) ","http://www.direct-netware.de/redirect.php?swg","direct Netware Group"," - All rights reserved");
@@ -82,9 +82,7 @@ switch ($direct_settings['a'])
 case "new":
 case "new-save":
 {
-	if ($direct_settings['a'] == "new-save") { $g_mode_save = true; }
-	else { $g_mode_save = false; }
-
+	$g_mode_save = (($direct_settings['a'] == "new-save") ? true : false);
 	if (USE_debug_reporting) { direct_debug (1,"sWG/#echo(__FILEPATH__)# _a={$direct_settings['a']}_ (#echo(__LINE__)#)"); }
 
 	$g_oid = (isset ($direct_settings['dsd']['doid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['doid'])) : "");
@@ -92,32 +90,17 @@ case "new-save":
 	$g_source = (isset ($direct_settings['dsd']['source']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['source'])) : "");
 	$g_target = (isset ($direct_settings['dsd']['target']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['target'])) : "");
 
-	$g_back_link = "";
-
-	if ($g_source)
-	{
-		$g_source_url = base64_decode ($g_source);
-		if ($g_source_url) { $g_back_link = str_replace ("[oid]","doid+{$g_oid}++",$g_source_url); }
-	}
-	else { $g_source_url = "m=datacenter&s=media&dsd=[oid]"; }
-
-	if ($g_connector) { $g_connector_url = base64_decode ($g_connector); }
-	else { $g_connector_url = NULL; }
-
-	if (!$g_connector_url)
-	{
-		$g_connector_url = "m=datacenter&s=media&a=[a]&dsd=[oid]";
-		$g_connector = urlencode (base64_encode ($g_connector_url));
-	}
-
-	if ((!$g_source)&&($g_connector_url)) { $g_back_link = str_replace (array ("[a]","[oid]"),(array ("view","doid+{$g_oid}++")),$g_connector_url); }
+	$g_connector_url = ($g_connector ? base64_decode ($g_connector) : "m=datacenter&s=media&a=[a]&dsd=[oid]");
+	$g_source_url = ($g_source ? base64_decode ($g_source) : "m=datacenter&s=media&dsd=[oid]");
 
 	if ($g_target) { $g_target_url = base64_decode ($g_target); }
 	else
 	{
 		$g_target = $g_source;
-		$g_target_url = $g_source_url;
+		$g_target_url = ($g_source ? $g_source_url : "");
 	}
+
+	$g_back_link = (((!$g_source)&&($g_connector_url)) ? preg_replace (array ("#\[a\]#","#\[oid\]#","#\[(.*?)\]#"),(array ("view","doid+{$g_oid}++","")),$g_connector_url) : str_replace ("[oid]","doid+{$g_oid}++",$g_source_url));
 
 	if ($g_mode_save)
 	{
@@ -151,8 +134,7 @@ case "new-save":
 
 	$g_datasub_check = false;
 
-	if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-	else { $g_datacenter_array = NULL; }
+	$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_oid) : NULL);
 
 	if (get_class ($g_datacenter_object) == "direct_datacenter")
 	{
@@ -168,9 +150,12 @@ case "new-save":
 	elseif ((($g_datasub_check)||($g_datacenter_object->is_writable ()))&&(($direct_settings['datacenter_upload_links_allowed'])||($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3)))
 	{
 		if ($g_mode_save) { direct_output_related_manager ("datacenter_control_links_new_{$g_oid}_form_save","pre_module_service_action"); }
-		else { direct_output_related_manager ("datacenter_control_links_new_{$g_oid}_form","pre_module_service_action"); }
+		else
+		{
+			direct_output_related_manager ("datacenter_control_links_new_{$g_oid}_form","pre_module_service_action");
+			$direct_classes['kernel']->service_https ($direct_settings['datacenter_https_control_objects'],$direct_cachedata['page_this']);
+		}
 
-		if (!$g_mode_save) { $direct_classes['kernel']->service_https ($direct_settings['datacenter_https_control_objects'],$direct_cachedata['page_this']); }
 		$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/classes/swg_formbuilder.php");
 		$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/classes/swg_formtags.php");
 		$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/functions/swg_credits_manager.php");
@@ -182,8 +167,7 @@ case "new-save":
 		direct_class_init ("output");
 		$direct_classes['output']->options_insert (2,"servicemenu",$direct_cachedata['page_backlink'],(direct_local_get ("core_back")),$direct_settings['serviceicon_default_back'],"url0");
 
-		if ($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) { $g_rights_check = true; }
-		else { $g_rights_check = false; }
+		$g_rights_check = (($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) ? true : false);
 
 		if ($g_mode_save)
 		{
@@ -195,7 +179,7 @@ We should have input in save mode
 			$direct_cachedata['i_dlink_title'] = (isset ($GLOBALS['i_dlink_title']) ? ($direct_classes['basic_functions']->inputfilter_basic ($GLOBALS['i_dlink_title'])) : "");
 			$direct_cachedata['i_dlink_desc'] = (isset ($GLOBALS['i_dlink_desc']) ? ($direct_classes['basic_functions']->inputfilter_basic ($GLOBALS['i_dlink_desc'])) : "");
 			$direct_cachedata['i_dlink_url'] = (isset ($GLOBALS['i_dlink_url']) ? ($direct_classes['basic_functions']->inputfilter_basic ($GLOBALS['i_dlink_url'])) : "");
-			$direct_cachedata['i_dtarget'] = (isset ($GLOBALS['i_dtarget']) ? (urlencode ($GLOBALS['i_dtarget'])) : "");
+			if (!$g_datasub_check) { $direct_cachedata['i_dtarget'] = (isset ($GLOBALS['i_dtarget']) ? (urlencode ($GLOBALS['i_dtarget'])) : ""); }
 			$direct_cachedata['i_dmode_last'] = (isset ($GLOBALS['i_dmode_last']) ? (str_replace ("'","",$GLOBALS['i_dmode_last'])) : "");
 			$direct_cachedata['i_dmode_all'] = (isset ($GLOBALS['i_dmode_all']) ? (str_replace ("'","",$GLOBALS['i_dmode_all'])) : "");
 
@@ -212,7 +196,7 @@ We should have input in save mode
 
 				$direct_cachedata['i_dsubs_type'] = (isset ($GLOBALS['i_dsubs_type']) ? (str_replace ("'","",$GLOBALS['i_dsubs_type'])) : 0);
 			}
-			elseif (($g_parent_object)&&($g_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent']))&&($g_parent_object->is_sub_allowed ()))
+			elseif ((!$g_datasub_check)&&($g_datacenter_object->is_sub_allowed ()))
 			{
 				$direct_cachedata['i_dsubs_allowed'] = (isset ($GLOBALS['i_dsubs_allowed']) ? (str_replace ("'","",$GLOBALS['i_dsubs_allowed'])) : "");
 				$direct_cachedata['i_dsubs_allowed'] = str_replace ("<value value='$direct_cachedata[i_dsubs_allowed]' />","<value value='$direct_cachedata[i_dsubs_allowed]' /><selected value='1' />","<evars><yes><value value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>");
@@ -252,16 +236,8 @@ $g_task_array = array (
 "uuid" => $direct_settings['uuid']
 );
 
-				if ($g_datasub_check)
-				{
-					$g_task_array['datacenter_objects_marked'] = array ("u-".$direct_settings['user']['id'] => "u-".$direct_settings['user']['id']);
-					$g_task_array['datacenter_selection_did'] = "u-".$direct_settings['user']['id'];
-				}
-				else
-				{
-					$g_task_array['datacenter_objects_marked'] = array ($g_oid => $g_oid);
-					$g_task_array['datacenter_selection_did'] = $g_oid;
-				}
+				$g_task_array['datacenter_objects_marked'] = array ($g_oid => $g_oid);
+				$g_task_array['datacenter_selection_did'] = $g_oid;
 
 				direct_tmp_storage_write ($g_task_array,$direct_cachedata['i_dtarget'],"d4d66a02daefdb2f70ff2507a78fd5ec","task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
 				// md5 ("datacenter")
@@ -283,12 +259,12 @@ $g_task_array = array (
 
 				$direct_cachedata['i_dsubs_type'] = (isset ($g_datacenter_array['ddbdatalinker_datasubs_type']) ? str_replace ("'","",$g_datacenter_array['ddbdatalinker_datasubs_type']) : 0);
 			}
-			elseif ($g_datacenter_object->is_sub_allowed ())
+			elseif ((!$g_datasub_check)&&($g_datacenter_object->is_sub_allowed ()))
 			{
-				if ((!$g_datasub_check)&&($g_datacenter_array['ddbdatalinker_datasubs_new'])) { $direct_cachedata['i_dsubs_allowed'] = "<evars><yes><value value='1' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>"; }
+				if ($g_datacenter_array['ddbdatalinker_datasubs_new']) { $direct_cachedata['i_dsubs_allowed'] = "<evars><yes><value value='1' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>"; }
 				else { $direct_cachedata['i_dsubs_allowed'] = "<evars><yes><value value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>"; }
 
-				if ((!$g_datasub_check)&&($g_datacenter_array['ddbdatalinker_datasubs_hide'])) { $direct_cachedata['i_dsubs_hidden'] = "<evars><yes><value value='1' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>"; }
+				if ($g_datacenter_array['ddbdatalinker_datasubs_hide']) { $direct_cachedata['i_dsubs_hidden'] = "<evars><yes><value value='1' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>"; }
 				else { $direct_cachedata['i_dsubs_hidden'] = "<evars><yes><value value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>"; }
 
 				$direct_cachedata['i_dsubs_type'] = (isset ($g_datacenter_array['ddbdatalinker_datasubs_type']) ? str_replace ("'","",$g_datacenter_array['ddbdatalinker_datasubs_type']) : 0);
@@ -326,7 +302,7 @@ Build the form
 	
 		if (isset ($direct_cachedata['i_dtarget']))
 		{
-			$direct_classes['formbuilder']->entry_add_embed ("dtarget",(direct_local_get ("datacenter_target_directory")),true,"m=dataport&s=swgap;datacenter;selector&a=list&dsd=","s");
+			$direct_classes['formbuilder']->entry_add_embed ("dtarget",(direct_local_get ("datacenter_target_directory")),true,"m=dataport&s=swgap;datacenter;selector&a=list&dsd=",false,"l");
 			$direct_classes['formbuilder']->entry_add ("spacer");
 		}
 
@@ -369,6 +345,9 @@ Save data edited
 
 			if ($direct_cachedata['i_dtos'])
 			{
+				$direct_cachedata['i_dtrusted'] = (((isset ($direct_cachedata['i_dtrusted']))&&($direct_cachedata['i_dtrusted'])) ? 1 : 0);
+				$direct_cachedata['i_dsubs_allowed'] = (((isset ($direct_cachedata['i_dsubs_allowed']))&&($direct_cachedata['i_dsubs_allowed'])) ? 1 : 0);
+
 				$direct_classes['db']->v_transaction_begin ();
 
 				$g_url_array = parse_url ($direct_cachedata['i_dlink_url']);
@@ -376,23 +355,12 @@ Save data edited
 
 				if (!strlen ($direct_cachedata['i_dlink_title'])) { $direct_cachedata['i_dlink_title'] = $direct_cachedata['i_dlink_url']; }
 				$direct_cachedata['i_dlink_desc'] = direct_output_smiley_encode ($direct_classes['formtags']->encode ($direct_cachedata['i_dlink_desc']));
+				if (!$direct_cachedata['i_dmode_last']) { $direct_cachedata['i_dmode_last'] = ($g_datasub_check ? "w" : $g_datacenter_array['ddbdatacenter_mode_last']); }
 
-				if ($g_datasub_check)
-				{
-					if (!$direct_cachedata['i_dmode_last']) { $direct_cachedata['i_dmode_last'] = "w"; }
-				}
-				elseif (!$direct_cachedata['i_dmode_last']) { $direct_cachedata['i_dmode_last'] = $g_datacenter_array['ddbdatacenter_mode_last']; }
-
-				if ((isset ($direct_cachedata['i_dtrusted']))&&($direct_cachedata['i_dtrusted'])) { $direct_cachedata['i_dtrusted'] = 1; }
-				else { $direct_cachedata['i_dtrusted'] = 0; }
-
-				if ((isset ($direct_cachedata['i_dsubs_allowed']))&&($direct_cachedata['i_dsubs_allowed'])) { $direct_cachedata['i_dsubs_allowed'] = 1; }
-				else { $direct_cachedata['i_dsubs_allowed'] = 0; }
-
-				$g_object_id = uniqid ("");
+				$g_link_id = uniqid ("");
 
 $g_insert_array = array (
-"ddbdatalinker_id" => $g_object_id,
+"ddbdatalinker_id" => $g_link_id,
 "ddbdatalinker_id_parent" => $g_did,
 "ddbdatalinker_sid" => "d4d66a02daefdb2f70ff2507a78fd5ec",
 // md5 ("datacenter")
@@ -430,18 +398,17 @@ $g_insert_array = array (
 				}
 
 				$g_continue_check = false;
-				$g_object_object = new direct_datacenter ();
+				$g_link_object = new direct_datacenter ();
 
-				$g_continue_check = $g_object_object->set ($g_insert_array);
+				$g_continue_check = $g_link_object->set ($g_insert_array);
 
 				if ($g_continue_check)
 				{
-					$g_object_object->set_evars (array ("ddbdatacenter_link_url" => $direct_cachedata['i_dlink_url']));
+					$g_link_object->set_evars (array ("ddbdatacenter_link_url" => $direct_cachedata['i_dlink_url']));
 					if (direct_mods_include ($direct_settings['datacenter_uploads_mods_support'],"datacenter_links","test")) { $g_insert_array = direct_mods_include (true,$direct_settings['datacenter_uploads_mods_support'],"datacenter_links","new_save",$g_oid,$g_datacenter_array,$g_insert_array); }
 				}
 
-				if (isset ($g_insert_array['ddbdatalinker_id'])) { $g_continue_check = $g_object_object->insert (); }
-				else { $g_continue_check = false; }
+				$g_continue_check = ((isset ($g_insert_array['ddbdatalinker_id'])) ? $g_link_object->insert () : false);
 
 				if ((!$g_datasub_check)&&($g_continue_check)) { $g_continue_check = $g_datacenter_object->add_objects (1); }
 
@@ -453,12 +420,12 @@ $g_insert_array = array (
 					if ($g_target_url)
 					{
 						$direct_cachedata['output_jsjump'] = 2000;
-						$g_target_link = str_replace ("[oid]","doid_d+{$g_object_id}++",$g_target_url);
+						$g_target_link = str_replace ("[oid]","doid_d+{$g_link_id}++",$g_target_url);
 					}
 					elseif ($g_connector_url)
 					{
 						$direct_cachedata['output_jsjump'] = 2000;
-						$g_target_link = str_replace (array ("[a]","[oid]"),(array ("view","doid_d+{$g_object_id}++")),$g_connector_url);
+						$g_target_link = str_replace (array ("[a]","[oid]"),(array ("view","doid_d+{$g_link_id}++")),$g_connector_url);
 					}
 					else { $direct_cachedata['output_jsjump'] = 0; }
 

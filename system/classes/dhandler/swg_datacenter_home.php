@@ -71,8 +71,7 @@ if (!defined ("direct_product_iversion")) { exit (); }
 Testing for required classes
 ------------------------------------------------------------------------- */
 
-$g_continue_check = true;
-if (defined ("CLASS_direct_datacenter_home")) { $g_continue_check = false; }
+$g_continue_check = ((defined ("CLASS_direct_datacenter_home")) ? false : true);
 if (!defined ("CLASS_direct_datalinker_uhome")) { $direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/classes/dhandler/swg_datalinker_uhome.php"); }
 if (!defined ("CLASS_direct_datalinker_uhome")) { $g_continue_check = false; }
 
@@ -306,9 +305,7 @@ Set up an additional datacenter class elements :)
 		if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -datacenter_home->define_marker_connector ($f_connector,$f_connector_type)- (#echo(__LINE__)#)"); }
 
 		if (is_string ($f_connector)) { $this->marker_connector = $f_connector; }
-
-		if (($f_connector_type != "asis")&&(strpos ($f_connector,"javascript:") === 0)) { $this->marker_connector_type = "asis"; }
-		else { $this->marker_connector_type = $f_connector_type; }
+		$this->marker_connector_type = ((($f_connector_type != "asis")&&(strpos ($f_connector,"javascript:") === 0)) ? "asis" : $f_connector_type);
 	}
 
 	//f// direct_datacenter->define_marker_titles ($f_title_mark,$f_title_unmark)
@@ -522,9 +519,7 @@ Set up an additional datacenter class elements :)
 					if ($f_user_array['ddbusers_deleted'])
 					{
 						$this->data_deleted = true;
-
-						if ($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) { $this->data_writable = true; }
-						else { $this->data_writable = false; }
+						$this->data_writable = (($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) ? true : false);
 					}
 					else
 					{
@@ -893,15 +888,12 @@ $f_init_array = array (
 			if (($f_connector_type != "asis")&&(strpos ($f_connector,"javascript:") === 0)) { $f_connector_type = "asis"; }
 
 			$f_pageurl = str_replace ("[a]","view",$f_connector);
-
-			if ($f_connector_type == "asis") { $f_pageurl = str_replace ("[oid]",$this->data['ddbdatalinker_id'],$f_pageurl); }
-			else { $f_pageurl = str_replace ("[oid]","doid+{$this->data['ddbdatalinker_id']}++",$f_pageurl); }
-
+			$f_pageurl = (($f_connector_type == "asis") ? str_replace ("[oid]",$this->data['ddbdatalinker_id'],$f_pageurl) : str_replace ("[oid]","doid+{$this->data['ddbdatalinker_id']}++",$f_pageurl));
 			$f_pageurl = preg_replace ("#\[(.*?)\]#","",$f_pageurl);
 			$f_return[$f_prefix."pageurl"] = direct_linker ($f_connector_type,$f_pageurl);
+
 			$f_return[$f_prefix."pageurl_download"] = "";
 			$f_return[$f_prefix."pageurl_parent"] = "";
-
 			$f_return[$f_prefix."owner"] = $this->data['ddbdatacenter_last_id'];
 			$f_return[$f_prefix."size"] = 0;
 			$f_return[$f_prefix."icon"] = "";
@@ -945,14 +937,11 @@ $f_init_array = array (
 
 			if (($this->marker_connector)&&($f_markable_check))
 			{
-				if ($f_connector_type == "asis") { $f_pageurl = str_replace ("[oid]",$this->data['ddbdatalinker_id'],$this->marker_connector); }
-				else { $f_pageurl = str_replace ("[oid]","doid+{$this->data['ddbdatalinker_id']}++",$this->marker_connector); }
-
+				$f_pageurl = (($f_connector_type == "asis") ? str_replace ("[oid]",$this->data['ddbdatalinker_id'],$this->marker_connector) : str_replace ("[oid]","doid+{$this->data['ddbdatalinker_id']}++",$this->marker_connector));
 				$f_pageurl = preg_replace ("#\[(.*?)\]#","",$f_pageurl);
 				$f_return[$f_prefix."pageurl_marker"] = direct_linker ($this->marker_connector_type,$f_pageurl);
 
-				if ($this->data_marked) { $f_return[$f_prefix."marker_title"] = $this->marker_title_unmark; }
-				else { $f_return[$f_prefix."marker_title"] = $this->marker_title_mark; }
+				$f_return[$f_prefix."marker_title"] = ($this->data_marked ? $this->marker_title_unmark : $this->marker_title_mark);
 			}
 
 			$f_return[$f_prefix."plocation"] = "";

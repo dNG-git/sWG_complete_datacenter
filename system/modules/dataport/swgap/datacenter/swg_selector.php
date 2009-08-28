@@ -148,8 +148,7 @@ case "list":
 
 	if ($g_continue_check)
 	{
-		if (strpos ($g_oid,"-") === false) { $g_datacenter_object = new direct_datacenter (); }
-		else { $g_datacenter_object = new direct_datacenter_home (); }
+		$g_datacenter_object = ((strpos ($g_oid,"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 
 		if ($g_datacenter_object)
 		{
@@ -181,34 +180,22 @@ case "list":
 		}
 		elseif ($g_datacenter_object->is_readable ())
 		{
-			if ($g_dtheme) { $direct_cachedata['output_dir'] = $g_datacenter_object->parse ("m=dataport&s=swgap;datacenter;selector&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page{$direct_cachedata['output_page']}]tid+".$direct_cachedata['output_tid']); }
-			else { $direct_cachedata['output_dir'] = $g_datacenter_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++tid+{$direct_cachedata['output_tid']}++doid+[oid]++page+[page{$direct_cachedata['output_page']}]')","asis"); }
+			$direct_cachedata['output_dir'] = ($g_dtheme ? $g_datacenter_object->parse ("m=dataport&s=swgap;datacenter;selector&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page{$direct_cachedata['output_page']}]tid+".$direct_cachedata['output_tid']) : $g_datacenter_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++tid+{$direct_cachedata['output_tid']}++doid+[oid]++page+[page{$direct_cachedata['output_page']}]')","asis"));
 
 			if ($g_task_array['datacenter_marker_type'] != "files-only") { $direct_classes['output']->options_insert (1,"servicemenu",$direct_cachedata['output_dir']['pageurl_marker'],$direct_cachedata['output_dir']['marker_title'],$direct_settings['serviceicon_datacenter_selector_marker'],"asis"); }
 
 			if ($g_datacenter_array['ddbdatalinker_id_parent'])
 			{
-				if (strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) { $g_datacenter_parent_object = new direct_datacenter (); }
-				else { $g_datacenter_parent_object = new direct_datacenter_home (); }
-
-				if (($g_datacenter_parent_object)&&($g_datacenter_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent'])))
-				{
-					if ($g_dtheme) { $direct_cachedata['output_dir_levelup'] = $g_datacenter_parent_object->parse ("m=dataport&s=swgap;datacenter;selector&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']); }
-					else { $direct_cachedata['output_dir_levelup'] = $g_datacenter_parent_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis"); }
-				}
+				$g_datacenter_parent_object = ((strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
+				if (($g_datacenter_parent_object)&&($g_datacenter_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent']))) { $direct_cachedata['output_dir_levelup'] = ($g_dtheme ? $g_datacenter_parent_object->parse ("m=dataport&s=swgap;datacenter;selector&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']) : $g_datacenter_parent_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis")); }
 			}
 
 			if (!empty ($g_datacenter_entries_array))
 			{
-				foreach ($g_datacenter_entries_array as $g_datacenter_entry_object)
-				{
-					if ($g_dtheme) { $direct_cachedata['output_objects'][] = $g_datacenter_entry_object->parse ("m=dataport&s=swgap;datacenter;selector&a=list&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']); }
-					else { $direct_cachedata['output_objects'][] = $g_datacenter_entry_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector&amp;a=list&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis"); }
-				}
+				foreach ($g_datacenter_entries_array as $g_datacenter_entry_object) { $direct_cachedata['output_objects'][] = ($g_dtheme ? $g_datacenter_entry_object->parse ("m=dataport&s=swgap;datacenter;selector&a=list&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']) : $g_datacenter_entry_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector&amp;a=list&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis")); }
 			}
 
-			if ((isset ($g_task_array['datacenter_selection_title']))&&($g_task_array['datacenter_selection_title'])) { $g_selector_title = $g_task_array['datacenter_selection_title']; }
-			else { $g_selector_title = $direct_cachedata['output_dir']['title']; }
+			$g_selector_title = (((isset ($g_task_array['datacenter_selection_title']))&&($g_task_array['datacenter_selection_title'])) ? $g_task_array['datacenter_selection_title'] : $direct_cachedata['output_dir']['title']);
 
 			if ($g_dtheme)
 			{
@@ -316,15 +303,13 @@ case "mark_switch":
 	direct_local_integration ("datacenter");
 
 	direct_class_init ("output");
-	if ($g_dtheme) { $direct_classes['output']->options_insert (2,"servicemenu",$direct_cachedata['page_backlink'],(direct_local_get ("core_back")),$direct_settings['serviceicon_default_back'],"url0"); }
+	if (($g_dtheme)&&($direct_cachedata['page_backlink'])) { $direct_classes['output']->options_insert (2,"servicemenu",$direct_cachedata['page_backlink'],(direct_local_get ("core_back")),$direct_settings['serviceicon_default_back'],"url0"); }
 
 	if ($g_continue_check)
 	{
-		if (strpos ($g_oid,"-") === false) { $g_datacenter_object = new direct_datacenter (); }
-		else { $g_datacenter_object = new direct_datacenter_home (); }
+		$g_datacenter_object = ((strpos ($g_oid,"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 
-		if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-		else { $g_datacenter_array = NULL; }
+		$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_oid) : NULL);
 
 		if (!is_array ($g_datacenter_array))
 		{

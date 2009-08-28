@@ -74,7 +74,7 @@ if (!isset ($direct_settings['datacenter_path_upload'])) { $direct_settings['dat
 if (!isset ($direct_settings['datacenter_uploads_localside'])) { $direct_settings['datacenter_uploads_localside'] = true; }
 if (!isset ($direct_settings['datacenter_uploads_mods_support'])) { $direct_settings['datacenter_uploads_mods_support'] = false; }
 if (!isset ($direct_settings['datacenter_uploads_serverside'])) { $direct_settings['datacenter_uploads_serverside'] = true; }
-if (!isset ($direct_settings['formtags_overview_document_url'])) { $direct_settings['formtags_overview_document_url'] = "m=contentor&s=handbooks&a=view&dsd=cdid+dng_{$direct_settings['lang']}_2_90000000001"; }
+if (!isset ($direct_settings['formtags_overview_document_url'])) { $direct_settings['formtags_overview_document_url'] = "m=contentor&a=view&dsd=cdid+dng_{$direct_settings['lang']}_2_90000000001"; }
 if (!isset ($direct_settings['serviceicon_datacenter_file_replace'])) { $direct_settings['serviceicon_datacenter_file_replace'] = "mini_default_option.png"; }
 if (!isset ($direct_settings['serviceicon_datacenter_link_replace'])) { $direct_settings['serviceicon_datacenter_link_replace'] = "mini_default_option.png"; }
 if (!isset ($direct_settings['serviceicon_default_back'])) { $direct_settings['serviceicon_default_back'] = "mini_default_back.png"; }
@@ -93,32 +93,17 @@ case "delete":
 	$g_source = (isset ($direct_settings['dsd']['source']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['source'])) : "");
 	$g_target = (isset ($direct_settings['dsd']['target']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['target'])) : "");
 
-	$g_back_link = "";
-
-	if ($g_source)
-	{
-		$g_source_url = base64_decode ($g_source);
-		if ($g_source_url) { $g_back_link = str_replace ("[oid]","doid+{$g_oid}++",$g_source_url); }
-	}
-	else { $g_source_url = "m=datacenter&s=media&dsd=[oid]"; }
-
-	if ($g_connector) { $g_connector_url = base64_decode ($g_connector); }
-	else { $g_connector_url = NULL; }
-
-	if (!$g_connector_url)
-	{
-		$g_connector_url = "m=datacenter&s=media&a=[a]&dsd=[oid]";
-		$g_connector = urlencode (base64_encode ($g_connector_url));
-	}
-
-	if ((!$g_source)&&($g_connector_url)) { $g_back_link = str_replace (array ("[a]","[oid]"),(array ("view","doid+{$g_oid}++")),$g_connector_url); }
+	$g_connector_url = ($g_connector ? base64_decode ($g_connector) : "m=datacenter&s=media&a=[a]&dsd=[oid]");
+	$g_source_url = ($g_source ? base64_decode ($g_source) : "m=datacenter&s=media&dsd=[oid]");
 
 	if ($g_target) { $g_target_url = base64_decode ($g_target); }
 	else
 	{
 		$g_target = $g_source;
-		$g_target_url = $g_source_url;
+		$g_target_url = ($g_source ? $g_source_url : "");
 	}
+
+	$g_back_link = (((!$g_source)&&($g_connector_url)) ? preg_replace (array ("#\[a\]#","#\[oid\]#","#\[(.*?)\]#"),(array ("view","doid+{$g_oid}++","")),$g_connector_url) : str_replace ("[oid]","doid+{$g_oid}++",$g_source_url));
 
 	$direct_cachedata['page_this'] = "m=datacenter&s=control_objects&a=delete&dsd=doid+$g_oid++connector+".(urlencode ($g_connector))."++source+".(urlencode ($g_source))."++target+".(urlencode ($g_target));
 	$direct_cachedata['page_backlink'] = $g_back_link;
@@ -132,19 +117,18 @@ case "delete":
 
 	$g_datacenter_object = new direct_datacenter ();
 	$g_datasub_check = false;
+	$g_parent_object = NULL;
 
-	if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-	else { $g_datacenter_array = NULL; }
+	$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_oid) : NULL);
 
-	if (isset ($g_datacenter_array['ddbdatalinker_id_parent']))
+	if ((is_array ($g_datacenter_array))&&($g_datacenter_array['ddbdatalinker_id_parent']))
 	{
-		if (strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) { $g_parent_object = new direct_datacenter (); }
-		else { $g_parent_object = new direct_datacenter_home (); }
+		$g_parent_object = ((strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 
 		if ($g_parent_object)
 		{
 			$g_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent']);
-			if ((!$g_parent_object->is_of_type ("d4d66a02daefdb2f70ff2507a78fd5ec",1))&&($direct_settings['user']['type'] != "gt")) { $g_datasub_check = $g_parent_object->is_sub_allowed (); }
+			if (!$g_parent_object->is_of_type ("d4d66a02daefdb2f70ff2507a78fd5ec",1)) { $g_datasub_check = $g_parent_object->is_sub_allowed (); }
 		}
 	}
 
@@ -164,13 +148,12 @@ case "delete":
 		{
 			if ($GLOBALS['i_dconfirm'])
 			{
-				if ($g_datacenter_object->is_physical ()) { $g_continue_check = true; }
-				else
+				$g_continue_check = true;
+
+				if (!$g_datacenter_object->is_physical ())
 				{
 					$direct_classes['db']->v_transaction_begin ();
-
-					if ($g_datasub_check) { $g_continue_check = $g_parent_object->remove_subs (1); }
-					else { $g_continue_check = $g_parent_object->remove_objects (1); }
+					if (isset ($g_parent_object)) { $g_continue_check = ($g_datasub_check ? $g_parent_object->remove_subs (1) : $g_parent_object->remove_objects (1)); }
 				}
 
 				if ($g_continue_check) { $g_continue_check = $g_datacenter_object->delete ($direct_settings['datacenter_path_upload']); }
@@ -232,9 +215,7 @@ case "delete":
 
 			$g_datacenter_parsed_array = $g_datacenter_object->parse ($g_connector_url);
 
-			if (strlen ($g_datacenter_parsed_array['title_alt'])) { $direct_cachedata['i_dobject'] = $g_datacenter_parsed_array['title_alt']; }
-			else { $direct_cachedata['i_dobject'] = $g_datacenter_parsed_array['title']; }
-
+			$direct_cachedata['i_dobject'] = ((strlen ($g_datacenter_parsed_array['title_alt'])) ? $g_datacenter_parsed_array['title_alt'] : $g_datacenter_parsed_array['title']);
 			$direct_cachedata['i_dconfirm'] = "<evars><yes><value value='1' /><text><![CDATA[".(direct_local_get ("core_yes"))."]]></text></yes><no><value value='0' /><selected value='1' /><text><![CDATA[".(direct_local_get ("core_no"))."]]></text></no></evars>";
 
 			$direct_classes['formbuilder']->entry_add ("info","dobject",(direct_local_get ("datacenter_object")),false);
@@ -262,9 +243,7 @@ case "delete":
 case "edit":
 case "edit-save":
 {
-	if ($direct_settings['a'] == "edit-save") { $g_mode_save = true; }
-	else { $g_mode_save = false; }
-
+	$g_mode_save = (($direct_settings['a'] == "edit-save") ? true : false);
 	if (USE_debug_reporting) { direct_debug (1,"sWG/#echo(__FILEPATH__)# _a={$direct_settings['a']}_ (#echo(__LINE__)#)"); }
 
 	$g_oid = (isset ($direct_settings['dsd']['doid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['doid'])) : "");
@@ -272,32 +251,17 @@ case "edit-save":
 	$g_source = (isset ($direct_settings['dsd']['source']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['source'])) : "");
 	$g_target = (isset ($direct_settings['dsd']['target']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['target'])) : "");
 
-	$g_back_link = "";
-
-	if ($g_source)
-	{
-		$g_source_url = base64_decode ($g_source);
-		if ($g_source_url) { $g_back_link = str_replace ("[oid]","doid+{$g_oid}++",$g_source_url); }
-	}
-	else { $g_source_url = "m=datacenter&s=media&dsd=[oid]"; }
-
-	if ($g_connector) { $g_connector_url = base64_decode ($g_connector); }
-	else { $g_connector_url = NULL; }
-
-	if (!$g_connector_url)
-	{
-		$g_connector_url = "m=datacenter&s=media&a=[a]&dsd=[oid]";
-		$g_connector = urlencode (base64_encode ($g_connector_url));
-	}
-
-	if ((!$g_source)&&($g_connector_url)) { $g_back_link = str_replace (array ("[a]","[oid]"),(array ("view","doid+{$g_oid}++")),$g_connector_url); }
+	$g_connector_url = ($g_connector ? base64_decode ($g_connector) : "m=datacenter&s=media&a=[a]&dsd=[oid]");
+	$g_source_url = ($g_source ? base64_decode ($g_source) : "m=datacenter&s=media&dsd=[oid]");
 
 	if ($g_target) { $g_target_url = base64_decode ($g_target); }
 	else
 	{
 		$g_target = $g_source;
-		$g_target_url = $g_source_url;
+		$g_target_url = ($g_source ? $g_source_url : "");
 	}
+
+	$g_back_link = (((!$g_source)&&($g_connector_url)) ? preg_replace (array ("#\[a\]#","#\[oid\]#","#\[(.*?)\]#"),(array ("view","doid+{$g_oid}++","")),$g_connector_url) : str_replace ("[oid]","doid+{$g_oid}++",$g_source_url));
 
 	if ($g_mode_save)
 	{
@@ -320,16 +284,18 @@ case "edit-save":
 
 	$g_datacenter_object = new direct_datacenter ();
 
-	if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-	else { $g_datacenter_array = NULL; }
+	$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_oid) : NULL);
 
 	if ((!is_array ($g_datacenter_array))||($g_datacenter_object->is_directory ())||($g_datacenter_object->is_physical ())) { $direct_classes['error_functions']->error_page ("standard","datacenter_oid_invalid","sWG/#echo(__FILEPATH__)# _a={$direct_settings['a']}_ (#echo(__LINE__)#)"); }
 	elseif ($g_datacenter_object->is_writable ())
 	{
 		if ($g_mode_save) { direct_output_related_manager ("datacenter_control_objects_edit_{$g_oid}_form_save","pre_module_service_action"); }
-		else { direct_output_related_manager ("datacenter_control_objects_edit_{$g_oid}_form","pre_module_service_action"); }
+		else
+		{
+			direct_output_related_manager ("datacenter_control_objects_edit_{$g_oid}_form","pre_module_service_action");
+			$direct_classes['kernel']->service_https ($direct_settings['datacenter_https_control_objects'],$direct_cachedata['page_this']);
+		}
 
-		if (!$g_mode_save) { $direct_classes['kernel']->service_https ($direct_settings['datacenter_https_control_objects'],$direct_cachedata['page_this']); }
 		$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/classes/swg_formbuilder.php");
 		$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/classes/swg_formtags.php");
 		$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/functions/swg_credits_manager.php");
@@ -349,11 +315,8 @@ case "edit-save":
 		{
 			$g_rights_check = false;
 
-			if (($g_datacenter_array['ddbdatalinker_id_parent'])&&($g_datacenter_array['ddbdatalinker_id_main']))
-			{
-				if (strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) { $g_parent_object = new direct_datacenter (); }
-				else { $g_parent_object = new direct_datacenter_home (); }
-			}
+			if (($g_datacenter_array['ddbdatalinker_id_parent'])&&($g_datacenter_array['ddbdatalinker_id_main'])) { $g_parent_object = ((strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ()); }
+			else { $g_parent_object = NULL; }
 		}
 
 		if ($g_mode_save)
@@ -492,8 +455,7 @@ Build the form
 Save data edited
 ------------------------------------------------------------------------- */
 
-			if ($g_datacenter_array['ddbdatacenter_type'] == "text/x-ddb-link") { $g_continue_check = true; }
-			else { $g_continue_check = direct_credits_payment_check (false,$direct_settings['datacenter_files_edit_credits_onetime']); }
+			$g_continue_check = (($g_datacenter_array['ddbdatacenter_type'] == "text/x-ddb-link") ? true : direct_credits_payment_check (false,$direct_settings['datacenter_files_edit_credits_onetime']));
 
 			if ($g_continue_check)
 			{
@@ -590,8 +552,7 @@ case "upload":
 	$g_source = (isset ($direct_settings['dsd']['source']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['source'])) : "");
 	$g_target = (isset ($direct_settings['dsd']['target']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['target'])) : "");
 
-	if ($g_source) { $g_source_url = base64_decode ($g_source); }
-	else { $g_source_url = "m=datacenter&s=media&dsd=doid+".$g_oid; }
+	$g_source_url = ($g_source ? base64_decode ($g_source) : "m=datacenter&s=media&dsd=[oid]");
 
 	if ($g_target) { $g_target_url = base64_decode ($g_target); }
 	else
@@ -610,15 +571,15 @@ case "upload":
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/classes/dhandler/swg_datacenter_home.php");
 	direct_local_integration ("datacenter");
 
-	if (strpos ($g_oid,"-") === false) { $g_datacenter_object = new direct_datacenter (); }
-	else { $g_datacenter_object = new direct_datacenter_home (); }
-
+	$g_datacenter_array = NULL;
+	$g_datacenter_object = ((strpos ($g_oid,"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 	$g_datasub_check = false;
 
-	if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-	else { $g_datacenter_array = NULL; }
-
-	if ((!$g_datacenter_object->is_of_type ("d4d66a02daefdb2f70ff2507a78fd5ec",1))&&($direct_settings['user']['type'] != "gt")) { $g_datasub_check = $g_datacenter_object->is_sub_allowed (); }
+	if ($g_datacenter_object)
+	{
+		$g_datacenter_array = $g_datacenter_object->get ($g_oid);
+		if (!$g_datacenter_object->is_of_type ("d4d66a02daefdb2f70ff2507a78fd5ec",1)) { $g_datasub_check = $g_datacenter_object->is_sub_allowed (); }
+	}
 
 	if ((!$g_datasub_check)&&((!is_array ($g_datacenter_array))||(!$g_datacenter_object->is_directory ()))) { $direct_classes['error_functions']->error_page ("standard","datacenter_did_invalid","sWG/#echo(__FILEPATH__)# _a=upload_ (#echo(__LINE__)#)"); }
 	elseif (($g_datacenter_object->is_writable ())&&(($direct_settings['datacenter_uploads_localside'])||($direct_settings['datacenter_uploads_serverside'])))
@@ -660,10 +621,10 @@ $g_task_array = array (
 "uuid" => $direct_settings['uuid']
 );
 
-	direct_tmp_storage_write ($g_task_array,$g_tid,"d4d66a02daefdb2f70ff2507a78fd5ec","task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 900));
-	// md5 ("datacenter")
-	direct_class_init ("output");
-	$direct_classes['output']->redirect (direct_linker ("url1","m=datacenter&s=uploads&a=preselect&dsd=tid+".$g_tid,false));
+		direct_tmp_storage_write ($g_task_array,$g_tid,"d4d66a02daefdb2f70ff2507a78fd5ec","task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 900));
+		// md5 ("datacenter")
+		direct_class_init ("output");
+		$direct_classes['output']->redirect (direct_linker ("url1","m=datacenter&s=uploads&a=preselect&dsd=tid+".$g_tid,false));
 	}
 	else { $direct_classes['error_functions']->error_page ("login","core_access_denied","sWG/#echo(__FILEPATH__)# _a=upload_ (#echo(__LINE__)#)"); }
 	//j// EOA

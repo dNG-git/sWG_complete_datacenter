@@ -196,37 +196,27 @@ case "list":
 
 			if (($g_plocation_directory)&&(substr ($g_plocation_directory,-1,1) != "/")) { $g_plocation_directory .= "/"; }
 
-			if ($g_dtheme) { $direct_cachedata['output_dir'] = $g_datacenter_object->parse ("m=dataport&s=swgap;datacenter;selector_icons&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page{$direct_cachedata['output_page']}]tid+".$direct_cachedata['output_tid']); }
-			else { $direct_cachedata['output_dir'] = $g_datacenter_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector_icons&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++tid+{$direct_cachedata['output_tid']}++doid+[oid]++page+[page{$direct_cachedata['output_page']}]')","asis"); }
+			$direct_cachedata['output_dir'] = ($g_dtheme ? $g_datacenter_object->parse ("m=dataport&s=swgap;datacenter;selector_icons&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page{$direct_cachedata['output_page']}]tid+".$direct_cachedata['output_tid']) : $g_datacenter_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector_icons&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++tid+{$direct_cachedata['output_tid']}++doid+[oid]++page+[page{$direct_cachedata['output_page']}]')","asis"));
 
 			if ($g_task_array['datacenter_marker_type'] != "files-only") { $direct_classes['output']->options_insert (1,"servicemenu",$direct_cachedata['output_dir']['pageurl_marker'],$direct_cachedata['output_dir']['marker_title'],$direct_settings['serviceicon_datacenter_selector_marker'],"asis"); }
 
 			if ($g_datacenter_array['ddbdatalinker_id_parent'])
 			{
-				if (strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) { $g_datacenter_parent_object = new direct_datacenter (); }
-				else { $g_datacenter_parent_object = new direct_datacenter_home (); }
-
-				if (($g_datacenter_parent_object)&&($g_datacenter_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent'])))
-				{
-					if ($g_dtheme) { $direct_cachedata['output_dir_levelup'] = $g_datacenter_parent_object->parse ("m=dataport&s=swgap;datacenter;selector_icons&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']); }
-					else { $direct_cachedata['output_dir_levelup'] = $g_datacenter_parent_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector_icons&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis"); }
-				}
+				$g_datacenter_parent_object = ((strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
+				if (($g_datacenter_parent_object)&&($g_datacenter_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent']))) { $direct_cachedata['output_dir_levelup'] = ($g_dtheme ? $g_datacenter_parent_object->parse ("m=dataport&s=swgap;datacenter;selector_icons&a=[a]&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']) : $g_datacenter_parent_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector_icons&amp;a=[a]&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis")); }
 			}
 
 			if (!empty ($g_datacenter_entries_array))
 			{
 				foreach ($g_datacenter_entries_array as $g_datacenter_entry_object)
 				{
-					if ($g_dtheme) { $g_datacenter_entry_array = $g_datacenter_entry_object->parse ("m=dataport&s=swgap;datacenter;selector_icons&a=list&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']); }
-					else { $g_datacenter_entry_array = $g_datacenter_entry_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector_icons&amp;a=list&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis"); }
-
+					$g_datacenter_entry_array = ($g_dtheme ? $g_datacenter_entry_object->parse ("m=dataport&s=swgap;datacenter;selector_icons&a=list&dsd=dtheme+{$g_dtheme_mode}++[oid][page]tid+".$direct_cachedata['output_tid']) : $g_datacenter_entry_object->parse ("javascript:djs_dataport_{$direct_cachedata['output_tid']}_call_url0('m=dataport&amp;s=swgap;datacenter;selector_icons&amp;a=list&amp;dsd=dtheme+{$g_dtheme_mode}++doid+[oid]++tid+{$direct_cachedata['output_tid']}++page+[page]')","asis"));
 					$g_datacenter_entry_array['icon'] = $g_datacenter_entry_object->get_plocation ($g_plocation_directory);
 					$direct_cachedata['output_objects'][] = $g_datacenter_entry_array;
 				}
 			}
 
-			if ((isset ($g_task_array['datacenter_selection_title']))&&($g_task_array['datacenter_selection_title'])) { $g_selector_title = $g_task_array['datacenter_selection_title']; }
-			else { $g_selector_title = $direct_cachedata['output_dir']['title']; }
+			$g_selector_title = (((isset ($g_task_array['datacenter_selection_title']))&&($g_task_array['datacenter_selection_title'])) ? $g_task_array['datacenter_selection_title'] : $direct_cachedata['output_dir']['title']);
 
 			if ($g_dtheme)
 			{

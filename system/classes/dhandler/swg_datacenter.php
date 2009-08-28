@@ -71,8 +71,7 @@ if (!defined ("direct_product_iversion")) { exit (); }
 Testing for required classes
 ------------------------------------------------------------------------- */
 
-$g_continue_check = true;
-if (defined ("CLASS_direct_datacenter")) { $g_continue_check = false; }
+$g_continue_check = ((defined ("CLASS_direct_datacenter")) ? false : true);
 if (!defined ("CLASS_direct_datalinker")) { $direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/classes/dhandler/swg_datalinker.php"); }
 if (!defined ("CLASS_direct_datalinker")) { $g_continue_check = false; }
 
@@ -384,10 +383,9 @@ Set up an additional datacenter class elements :)
 		{
 			if (((is_bool ($f_state))||(is_string ($f_state)))&&($f_state)) { $f_return = true; }
 			elseif (($f_state === NULL)&&(!$this->data['ddbdatacenter_locked'])) { $f_return = true; }
+			$this->data_locked = $f_return;
 
-			if ($f_return) { $this->data['ddbdatacenter_locked'] = 1; }
-			else { $this->data['ddbdatacenter_locked'] = 0; }
-
+			$this->data['ddbdatacenter_locked'] = ($f_return ? 1 : 0);
 			$this->data_changed['ddbdatacenter_locked'] = true;
 			if ($f_update) { $this->update (); }
 		}
@@ -412,9 +410,7 @@ Set up an additional datacenter class elements :)
 		if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -datacenter->define_marker_connector ($f_connector)- (#echo(__LINE__)#)"); }
 
 		if (is_string ($f_connector)) { $this->marker_connector = $f_connector; }
-
-		if (($f_connector_type != "asis")&&(strpos ($f_connector,"javascript:") === 0)) { $this->marker_connector_type = "asis"; }
-		else { $this->marker_connector_type = $f_connector_type; }
+		$this->marker_connector_type = ((($f_connector_type != "asis")&&(strpos ($f_connector,"javascript:") === 0)) ? "asis" : $f_connector_type);
 	}
 
 	//f// direct_datacenter->define_marker_titles ($f_title_mark,$f_title_unmark)
@@ -526,27 +522,37 @@ Set up an additional datacenter class elements :)
 		return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -datacenter->define_readable ()- (#echo(__LINE__)#)",:#*/$this->data_readable/*#ifdef(DEBUG):,true):#*/;
 	}
 
-	//f// direct_datacenter->define_trusted ($f_state = NULL)
+	//f// direct_datacenter->define_trusted ($f_state = NULL,$f_update = false)
 /**
 	* Sets the trusted state of this object.
 	*
 	* @param  mixed $f_state Boolean indicating the state or NULL to switch
 	*         automatically
+	* @param  boolean $f_update True to update the database entry
 	* @uses   direct_debug()
 	* @uses   USE_debug_reporting
 	* @return boolean Accepted state
 	* @since  v0.1.00
 */
-	public function define_trusted ($f_state = NULL)
+	public function define_trusted ($f_state = NULL,$f_update = false)
 	{
-		if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -datacenter->define_trusted (+f_state)- (#echo(__LINE__)#)"); }
+		if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -datacenter->define_trusted (+f_state,+f_update)- (#echo(__LINE__)#)"); }
+		$f_return = false;
 
-		if (((is_bool ($f_state))||(is_string ($f_state)))&&($f_state)) { $this->data_trusted = true; }
-		elseif (($f_state === NULL)&&(!$this->data_trusted)) { $this->data_trusted = true; }
-		else { $this->data_trusted = false; }
+		if ((count ($this->data) > 1)&&($this->physical === NULL))
+		{
+			if (((is_bool ($f_state))||(is_string ($f_state)))&&($f_state)) { $f_return = true; }
+			elseif (($f_state === NULL)&&(!$this->data['ddbdatacenter_trusted'])) { $f_return = true; }
+			$this->data_trusted = $f_return;
 
-		return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -datacenter->define_trusted ()- (#echo(__LINE__)#)",:#*/$this->data_trusted/*#ifdef(DEBUG):,true):#*/;
+			$this->data['ddbdatacenter_trusted'] = ($f_return ? 1 : 0);
+			$this->data_changed['ddbdatacenter_trusted'] = true;
+			if ($f_update) { $this->update (); }
+		}
+
+		return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -datacenter->define_trust ()- (#echo(__LINE__)#)",:#*/$f_return/*#ifdef(DEBUG):,true):#*/;
 	}
+
 
 	//f// direct_datacenter->define_writable ($f_state = NULL)
 /**
@@ -638,12 +644,7 @@ Set up an additional datacenter class elements :)
 			else
 			{
 				$f_physical_path = $this->get_plocation ();
-
-				if (strlen ($f_physical_path))
-				{
-					if ($this->data_directory) { $f_return = direct_dir_remove ($f_physical_path,true); }
-					else { $f_return = @unlink ($f_physical_path); }
-				}
+				if (strlen ($f_physical_path)) { $f_return = ($this->data_directory ? direct_dir_remove ($f_physical_path,true) : @unlink ($f_physical_path)); }
 			}
 		}
 
@@ -709,8 +710,7 @@ $f_select_joins = array (
 					$this->data_evars_id = substr ($this->data['ddbdatacenter_plocation'],6);
 				}
 
-				if ($this->data['ddbdatacenter_deleted']) { $this->data_deleted = true; }
-				else { $this->data_deleted = false; }
+				$this->data_deleted = ($this->data['ddbdatacenter_deleted'] ? true : false);
 
 				if ($this->data['ddbdatalinker_type'] == 1)
 				{
@@ -719,12 +719,8 @@ $f_select_joins = array (
 				}
 				else { $this->data_directory = false; }
 
-				if ($this->data['ddbdatacenter_trusted']) { $this->data_trusted = true; }
-				else { $this->data_trusted = false; }
-
-				if ($this->data['ddbdatacenter_locked']) { $this->data_locked = true; }
-				else { $this->data_locked = false; }
-
+				$this->data_trusted = ($this->data['ddbdatacenter_trusted'] ? true : false);
+				$this->data_locked = ($this->data['ddbdatacenter_locked'] ? true : false);
 				$this->data_marked = in_array ($this->data['ddbdatalinker_id'],$this->data_markers);
 
 				$f_result_array = $this->get_rights ();
@@ -739,12 +735,9 @@ $f_select_joins = array (
 						$f_object_name = $f_path_array['basename'];
 						$f_physical_path .= "/".$f_path;
 
-						if (is_dir ($f_physical_path)) { $f_object_type = "text/directory"; }
-						else { $f_object_type = $direct_classes['basic_functions']->mimetype_extension ($f_path_array['extension']); }
+						$f_object_type = ((is_dir ($f_physical_path)) ? "text/directory" : $direct_classes['basic_functions']->mimetype_extension ($f_path_array['extension']));
 
-						if ($f_path_array['dirname'] == ".") { $this->data['ddbdatalinker_id_parent'] = $this->data['ddbdatalinker_id']; }
-						else { $this->data['ddbdatalinker_id_parent'] = $this->data['ddbdatalinker_id'].":".(base64_encode ($f_path_array['dirname'])); }
-
+						$this->data['ddbdatalinker_id_parent'] = (($f_path_array['dirname'] == ".") ? $this->data['ddbdatalinker_id'] : $this->data['ddbdatalinker_id'].":".(base64_encode ($f_path_array['dirname'])));
 						$this->data['ddbdatalinker_id'] = $this->data['ddbdatalinker_id'].":".(base64_encode ($f_path));
 						$this->physical = $f_path;
 					}
@@ -1058,7 +1051,6 @@ $this->define_extra_joins (array (
 						{
 							$f_datacenter_object = new direct_datacenter ($f_init_array);
 							$f_data_array['ddbdatacenter_size'] = filesize ($f_data_array['datacenter_physical']);
-
 							if ($f_datacenter_object->set($f_data_array)) { $this->class_subs[$f_cache_signature][] = $f_datacenter_object; }
 						}
 					}
@@ -1214,23 +1206,18 @@ $this->define_extra_joins (array (
 				$f_data_array = $this->data;
 				$f_data_array['datacenter_physical'] = $f_physical_path."/".$f_object;
 				$f_data_array['ddbdatacenter_plocation'] = $f_logical_path.$f_object;
-
-				if (($f_since_date)||($f_sort_key == "ddbdatalinker_sorting_date")) { $f_data_array['ddbdatalinker_sorting_date'] = filemtime ($f_data_array['datacenter_physical']); }
-				else { $f_data_array['ddbdatalinker_sorting_date'] = NULL; }
+				$f_data_array['ddbdatalinker_sorting_date'] = ((($f_since_date)||($f_sort_key == "ddbdatalinker_sorting_date")) ? filemtime ($f_data_array['datacenter_physical']) : NULL);
 
 				if ((!$f_since_date)||($f_since_date < $f_data_array['ddbdatalinker_sorting_date']))
 				{
-					if (preg_match ("#^(.+?):(.*?)$#",$this->data['ddbdatalinker_id'],$f_result_array)) { $f_data_array['ddbdatalinker_id'] = $f_result_array[1].":".(base64_encode ($f_logical_path.$f_object)); }
-					else { $f_data_array['ddbdatalinker_id'] = $this->data['ddbdatalinker_id'].":".(base64_encode ($f_logical_path.$f_object)); }
-
+					$f_data_array['ddbdatalinker_id'] = ((preg_match ("#^(.+?):(.*?)$#",$this->data['ddbdatalinker_id'],$f_result_array)) ? $f_result_array[1].":".(base64_encode ($f_logical_path.$f_object)) : $this->data['ddbdatalinker_id'].":".(base64_encode ($f_logical_path.$f_object)));
 					$f_data_array['ddbdatalinker_objects'] = 0;
 					$f_data_array['ddbdatalinker_title_alt'] = $f_object; 
 					$f_data_array['ddbdatacenter_desc'] = "";
 
 					$f_object_array = pathinfo ($f_logical_path.$f_object);
 
-					if ($f_object_array['dirname'] == ".") { $f_data_array['ddbdatalinker_id_parent'] = $this->data['ddbdatalinker_id']; }
-					else { $f_data_array['ddbdatalinker_id_parent'] = $this->data['ddbdatalinker_id'].":".$f_logical_path_encoded; }
+					$f_data_array['ddbdatalinker_id_parent'] = (($f_object_array['dirname'] == ".") ? $this->data['ddbdatalinker_id'] : $this->data['ddbdatalinker_id'].":".$f_logical_path_encoded);
 
 					if (is_dir ($f_data_array['datacenter_physical']))
 					{
@@ -1460,10 +1447,7 @@ $this->define_extra_joins (array (
 			else
 			{
 				$f_pageurl = str_replace ("[a]","view",$f_connector);
-
-				if ($f_connector_type == "asis") { $f_pageurl = str_replace ("[oid]",(urlencode ($this->data['ddbdatalinker_id'])),$f_pageurl); }
-				else { $f_pageurl = str_replace ("[oid]","doid+".(urlencode ($this->data['ddbdatalinker_id']))."++",$f_pageurl); }
-
+				$f_pageurl = (($f_connector_type == "asis") ? str_replace ("[oid]",(urlencode ($this->data['ddbdatalinker_id'])),$f_pageurl) : str_replace ("[oid]","doid+".(urlencode ($this->data['ddbdatalinker_id']))."++",$f_pageurl));
 				$f_pageurl = preg_replace ("#\[(.*?)\]#","",$f_pageurl);
 				$f_return[$f_prefix."pageurl"] = direct_linker ($f_connector_type,$f_pageurl);
 			}
@@ -1471,18 +1455,13 @@ $this->define_extra_joins (array (
 			if ($this->data['ddbdatalinker_id_parent'])
 			{
 				$f_pageurl = str_replace ("[a]","view",$f_connector);
-
-				if ($f_connector_type == "asis") { $f_pageurl = str_replace ("[oid]",(urlencode ($this->data['ddbdatalinker_id_parent'])),$f_pageurl); }
-				else { $f_pageurl = str_replace ("[oid]","doid+".(urlencode ($this->data['ddbdatalinker_id_parent']))."++",$f_pageurl); }
-
+				$f_pageurl = (($f_connector_type == "asis") ? str_replace ("[oid]",(urlencode ($this->data['ddbdatalinker_id_parent'])),$f_pageurl) : str_replace ("[oid]","doid+".(urlencode ($this->data['ddbdatalinker_id_parent']))."++",$f_pageurl));
 				$f_pageurl = preg_replace ("#\[(.*?)\]#","",$f_pageurl);
 				$f_return[$f_prefix."pageurl_parent"] = direct_linker ($f_connector_type,$f_pageurl);
 			}
 			else { $f_return[$f_prefix."pageurl_parent"] = ""; }
 
-			if ($this->data_directory) { $f_return[$f_prefix."pageurl_download"] = ""; }
-			else { $f_return[$f_prefix."pageurl_download"] = direct_linker ($f_connector_type,"m=datacenter&a=transfer_dl&dsd=doid+".(urlencode ($this->data['ddbdatalinker_id']))); }
-
+			$f_return[$f_prefix."pageurl_download"] = ($this->data_directory ? "" : direct_linker ($f_connector_type,"m=datacenter&a=transfer_dl&dsd=doid+".(urlencode ($this->data['ddbdatalinker_id']))));
 			$f_return[$f_prefix."owner"] = $this->data['ddbdatacenter_last_id'];
 			$f_return[$f_prefix."size"] = $this->data['ddbdatacenter_size'];
 			$f_return[$f_prefix."icon"] = "";
@@ -1501,9 +1480,7 @@ $this->define_extra_joins (array (
 			}
 
 			$f_return[$f_prefix."desc"] = $direct_classes['formtags']->decode ($this->data['ddbdatacenter_desc']);
-
-			if ($this->data['ddbdatalinker_sorting_date']) { $f_return[$f_prefix."time"] = $direct_classes['basic_functions']->datetime ("longdate&time",$this->data['ddbdatalinker_sorting_date'],$direct_settings['user']['timezone'],(direct_local_get ("datetime_dtconnect"))); }
-			else { $f_return[$f_prefix."time"] = direct_local_get ("core_unknown"); }
+			$f_return[$f_prefix."time"] = ($this->data['ddbdatalinker_sorting_date'] ? $direct_classes['basic_functions']->datetime ("longdate&time",$this->data['ddbdatalinker_sorting_date'],$direct_settings['user']['timezone'],(direct_local_get ("datetime_dtconnect"))) : direct_local_get ("core_unknown"));
 
 			$f_markable_check = false;
 			$f_return[$f_prefix."marked"] = $this->data_marked;
@@ -1542,14 +1519,11 @@ $this->define_extra_joins (array (
 
 			if (($this->marker_connector)&&($f_markable_check))
 			{
-				if ($f_connector_type == "asis") { $f_pageurl = str_replace ("[oid]",(urlencode ($this->data['ddbdatalinker_id'])),$this->marker_connector); }
-				else { $f_pageurl = str_replace ("[oid]","doid+".(urlencode ($this->data['ddbdatalinker_id']))."++",$this->marker_connector); }
-
+				$f_pageurl = (($f_connector_type == "asis") ? str_replace ("[oid]",(urlencode ($this->data['ddbdatalinker_id'])),$this->marker_connector) : str_replace ("[oid]","doid+".(urlencode ($this->data['ddbdatalinker_id']))."++",$this->marker_connector));
 				$f_pageurl = preg_replace ("#\[(.*?)\]#","",$f_pageurl);
 				$f_return[$f_prefix."pageurl_marker"] = direct_linker ($this->marker_connector_type,$f_pageurl);
 
-				if ($this->data_marked) { $f_return[$f_prefix."marker_title"] = $this->marker_title_unmark; }
-				else { $f_return[$f_prefix."marker_title"] = $this->marker_title_mark; }
+				$f_return[$f_prefix."marker_title"] = ($this->data_marked ? $this->marker_title_unmark : $this->marker_title_mark);
 			}
 
 			$f_return[$f_prefix."plocation"] = $this->get_plocation ();
@@ -1573,9 +1547,7 @@ $f_prefix."usersignature" => ""
 
 			$f_return = array_merge ($f_return,$f_user_parsed_array);
 
-			if ($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) { $f_return[$f_prefix."userip"] = $this->data['ddbdatacenter_last_ip']; }
-			else { $f_return[$f_prefix."userip"] = ""; }
-
+			$f_return[$f_prefix."userip"] = (($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) ? $this->data['ddbdatacenter_last_ip'] : "");
 			$f_return[$f_prefix."trusted"] =  $this->data_trusted;
 		}
 
@@ -1636,8 +1608,11 @@ $f_prefix."usersignature" => ""
 				$f_data['ddbdatacenter_last_ip'] = $direct_settings['user_ip'];
 			}
 
-			if (!$direct_settings['swg_ip_save2db']) { $f_data['ddbdatacenter_owner_ip'] = "unknown"; }
-			if (!$direct_settings['swg_ip_save2db']) { $f_data['ddbdatacenter_last_ip'] = "unknown"; }
+			if (!$direct_settings['swg_ip_save2db'])
+			{
+				$f_data['ddbdatacenter_owner_ip'] = "unknown";
+				$f_data['ddbdatacenter_last_ip'] = "unknown";
+			}
 
 			if (!isset ($f_data['ddbusers_type'],$f_data['ddbusers_banned'],$f_data['ddbusers_deleted'],$f_data['ddbusers_name'],$f_data['ddbusers_title'],$f_data['ddbusers_avatar'],$f_data['ddbusers_signature'],$f_data['ddbusers_rating']))
 			{
@@ -1648,12 +1623,7 @@ $f_prefix."usersignature" => ""
 			if (!isset ($f_data['ddbdatacenter_size'])) { $f_data['ddbdatacenter_size'] = 0; }
 			if (!isset ($f_data['ddbdatacenter_desc'])) { $f_data['ddbdatacenter_desc'] = ""; }
 			if (!isset ($f_data['ddbdatacenter_plocation'])) { $f_data['ddbdatacenter_plocation'] = ""; }
-
-			if (!isset ($f_data['ddbdatacenter_trusted']))
-			{
-				if ($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) { $f_data['ddbdatacenter_trusted'] = 1; }
-				else { $f_data['ddbdatacenter_trusted'] = 0; }
-			}
+			if (!isset ($f_data['ddbdatacenter_trusted'])) { $f_data['ddbdatacenter_trusted'] = (($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) > 3) ? 1 : 0); }
 
 			$this->set_extras ($f_data,(array ("ddbdatacenter_owner_id","ddbdatacenter_owner_ip","ddbdatacenter_last_id","ddbdatacenter_last_ip","ddbdatacenter_size","ddbdatacenter_type","ddbdatacenter_desc","ddbdatacenter_plocation","ddbdatacenter_mode_owner","ddbdatacenter_mode_last","ddbdatacenter_mode_all","ddbdatacenter_trusted","ddbdatacenter_deleted","ddbdatacenter_locked","ddbusers_type","ddbusers_banned","ddbusers_deleted","ddbusers_name","ddbusers_title","ddbusers_avatar","ddbusers_signature","ddbusers_rating")));
 			$this->data_pid = $this->data['ddbdatalinker_id_parent'];
@@ -1671,8 +1641,7 @@ $f_prefix."usersignature" => ""
 				$this->data_evars_id = substr ($this->data['ddbdatacenter_plocation'],6);
 			}
 
-			if ($this->data['ddbdatacenter_deleted']) { $this->data_deleted = true; }
-			else { $this->data_deleted = false; }
+			$this->data_deleted = ($this->data['ddbdatacenter_deleted'] ? true : false);
 
 			if ($this->data['ddbdatalinker_type'] == 1)
 			{
@@ -1681,12 +1650,8 @@ $f_prefix."usersignature" => ""
 			}
 			else { $this->data_directory = false; }
 
-			if ($this->data['ddbdatacenter_trusted']) { $this->data_trusted = true; }
-			else { $this->data_trusted = false; }
-
-			if ($this->data['ddbdatacenter_locked']) { $this->data_locked = true; }
-			else { $this->data_locked = false; }
-
+			$this->data_trusted = ($this->data['ddbdatacenter_trusted'] ? true : false);
+			$this->data_locked = ($this->data['ddbdatacenter_locked'] ? true : false);
 			$this->data_marked = in_array ($this->data['ddbdatalinker_id'],$this->data_markers);
 
 			$f_result_array = $this->get_rights ();
@@ -1845,8 +1810,7 @@ $f_prefix."usersignature" => ""
 
 			if (($f_return)&&(is_array ($this->data))&&(!empty ($this->data)))
 			{
-				if (($this->data_evars_id)&&($this->data['ddbdatacenter_plocation'] != "evars:".$this->data_evars_id)) { $f_delete_evars_check = true; }
-				else { $f_delete_evars_check = false; }
+				$f_delete_evars_check = ((($this->data_evars_id)&&($this->data['ddbdatacenter_plocation'] != "evars:".$this->data_evars_id)) ? true : false);
 
 				if ($this->is_changed (array ("ddbdatacenter_owner_id","ddbdatacenter_owner_ip","ddbdatacenter_last_id","ddbdatacenter_last_ip","ddbdatacenter_size","ddbdatacenter_type","ddbdatacenter_desc","ddbdatacenter_plocation","ddbdatacenter_mode_owner","ddbdatacenter_mode_last","ddbdatacenter_mode_all","ddbdatacenter_trusted","ddbdatacenter_deleted","ddbdatacenter_locked")))
 				{

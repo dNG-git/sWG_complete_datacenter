@@ -108,7 +108,6 @@ case "view":
 	$direct_classes['basic_functions']->require_file ($direct_settings['path_system']."/functions/swg_mods_support.php");
 	direct_local_integration ("datacenter");
 
-	$g_datacenter_array = NULL;
 	$g_datacenter_entries_array = NULL;
 
 	if ((!$g_oid)&&($direct_settings['user']['type'] != "gt"))
@@ -119,8 +118,7 @@ case "view":
 	elseif (strpos ($g_oid,"u-") === 0) { $g_datacenter_object = new direct_datacenter_home (); }
 	else { $g_datacenter_object = new direct_datacenter (); }
 
-	if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_oid); }
-	else { $g_datacenter_array = NULL; }
+	$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_oid) : NULL);
 
 	if ($g_datacenter_array)
 	{
@@ -163,9 +161,7 @@ case "view":
 // TODO						$direct_classes['output']->options_insert (1,"servicemenu","m=datacenter&s=control_dirs&a=move&dsd=doid+{$g_oid}++source+".$direct_cachedata['output_source'],(direct_local_get ("datacenter_dir_move")),$direct_settings['serviceicon_datacenter_dir_move'],"url0");
 					}
 
-					if (strlen ($g_datacenter_array['ddbdatalinker_id_main'])) { $g_target_url = urlencode (base64_encode ("m=datacenter&s=media&dsd=doid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))); }
-					else { $g_target_url = urlencode (base64_encode ("m=datalinker&dsd=deid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))); }
-
+					$g_target_url = ((strlen ($g_datacenter_array['ddbdatalinker_id_main'])) ? urlencode (base64_encode ("m=datacenter&s=media&dsd=doid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))) : urlencode (base64_encode ("m=datalinker&dsd=deid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))));
 					$direct_classes['output']->options_insert (1,"servicemenu","m=datacenter&s=control_dirs&a=delete&dsd=doid+{$g_oid}++source+".$direct_cachedata['output_source']."++target+".$g_target_url,(direct_local_get ("datacenter_dir_delete")),$direct_settings['serviceicon_datacenter_dir_delete'],"url0");
 				}
 
@@ -195,9 +191,7 @@ case "view":
 
 				if (!$g_inuse_check)
 				{
-					if (strlen ($g_datacenter_array['ddbdatalinker_id_main'])) { $g_target_url = urlencode (base64_encode ("m=datacenter&s=media&dsd=doid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))); }
-					else { $g_target_url = urlencode (base64_encode ("m=datalinker&dsd=deid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))); }
-
+					$g_target_url = ((strlen ($g_datacenter_array['ddbdatalinker_id_main'])) ? urlencode (base64_encode ("m=datacenter&s=media&dsd=doid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))) : urlencode (base64_encode ("m=datalinker&dsd=deid+".(urlencode ($g_datacenter_array['ddbdatalinker_id_parent'])))));
 					$direct_classes['output']->options_insert (1,"servicemenu","m=datacenter&s=control_objects&a=delete&dsd=doid+{$g_oid}++source+".$direct_cachedata['output_source']."++target+".$g_target_url,(direct_local_get ("datacenter_object_delete")),$direct_settings['serviceicon_datacenter_object_delete'],"url0");
 				}
 			}
@@ -212,14 +206,11 @@ case "view":
 
 		if (($g_datacenter_array['ddbdatalinker_id_parent'])&&($g_datacenter_array['ddbdatalinker_id_main']))
 		{
-			if (strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) { $g_parent_object = new direct_datacenter (); }
-			else { $g_parent_object = new direct_datacenter_home (); }
+			$g_parent_object = ((strpos ($g_datacenter_array['ddbdatalinker_id_parent'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 
 			if (($g_parent_object)&&($g_parent_object->get ($g_datacenter_array['ddbdatalinker_id_parent'])))
 			{
-				if (isset ($g_datacenter_entries_array)) { $direct_cachedata['output_dir_levelup'] = $g_parent_object->parse ("m=datacenter&s=media&a=[a]&dsd=[oid][page]"); }
-				else { $direct_cachedata['output_dir'] = $g_parent_object->parse ("m=datacenter&s=media&a=[a]&dsd=[oid][page]"); }
-
+				$direct_cachedata['output_dir_levelup'] = ((isset ($g_datacenter_entries_array)) ? $g_parent_object->parse ("m=datacenter&s=media&a=[a]&dsd=[oid][page]") : $g_parent_object->parse ("m=datacenter&s=media&a=[a]&dsd=[oid][page]"));
 				$direct_cachedata['page_backlink'] = "m=datacenter&s=media&dsd=doid+".$g_datacenter_array['ddbdatalinker_id_parent'];
 			}
 		}

@@ -91,8 +91,8 @@ function direct_datalinker_datacenter_iviewer ($f_viewer_data,&$f_object)
 
 	if (isset ($f_viewer_data['handler']))
 	{
-		$f_continue_check = $direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/functions/datalinker/swg_datacenter.php");
-		if ($f_continue_check) { $f_object_iview =& direct_datalinker_datacenter ($f_object); }
+		if ($direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/functions/datalinker/swg_datacenter.php")) { $f_object_iview =& direct_datalinker_datacenter ($f_object); }
+		else { $f_object_iview = NULL; }
 
 		if ($f_object_iview)
 		{
@@ -278,22 +278,17 @@ function direct_datalinker_datacenter_iviewer_universal ($f_viewer_data,&$f_obje
 
 	if (isset ($f_viewer_data['handler']))
 	{
-		$f_continue_check = $direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/classes/dhandler/swg_datacenter_home.php");
-
-		$f_link_array = NULL;
+		$f_object_array = (($direct_classes['basic_functions']->include_file ($direct_settings['path_system']."/classes/dhandler/swg_datacenter_home.php")) ? $f_object->get () : NULL);
 		$f_parent_array = NULL;
 		$f_subs_check = false;
 
-		if ($f_continue_check) { $f_link_array = $f_object->get (); }
-
-		if (is_array ($f_link_array))
+		if (is_array ($f_object_array))
 		{
-			if (strpos ($f_link_array['ddbdatalinker_id_main'],"u-") === 0) { $f_parent_object = new direct_datacenter_home (); }
-			else { $f_parent_object = new direct_datacenter (); }
+			$f_parent_object = ((strpos ($f_object_array['ddbdatalinker_id_main'],"u-") === 0) ? new direct_datacenter_home () : new direct_datacenter ());
 
-			if ($f_link_array['ddbdatalinker_id_main'])
+			if ($f_object_array['ddbdatalinker_id_main'])
 			{
-				if ($f_parent_object) { $f_parent_array = $f_parent_object->get ($f_link_array['ddbdatalinker_id_main']); }
+				if ($f_parent_object) { $f_parent_array = $f_parent_object->get ($f_object_array['ddbdatalinker_id_main']); }
 			}
 			else { $f_subs_check = true; }
 		}
@@ -316,10 +311,7 @@ function direct_datalinker_datacenter_iviewer_universal ($f_viewer_data,&$f_obje
 			$f_return['object_last_username'] = $f_parsed_array['username'];
 			$f_return['object_last_userpageurl'] = $f_parsed_array['userpageurl'];
 			$f_return['object_last_useravatar'] = $f_parsed_array['useravatar_small'];
-
-			if ($f_link_array['ddbdatalinker_sorting_date']) { $f_return['object_last_time'] = $direct_classes['basic_functions']->datetime ("shortdate&time",$f_link_array['ddbdatalinker_sorting_date'],$direct_settings['user']['timezone'],(direct_local_get ("datetime_dtconnect"))); }
-			else { $f_return['object_last_time'] = direct_local_get ("core_unknown"); }
-
+			$f_return['object_last_time'] = ($f_object_array['ddbdatalinker_sorting_date'] ? $direct_classes['basic_functions']->datetime ("shortdate&time",$f_object_array['ddbdatalinker_sorting_date'],$direct_settings['user']['timezone'],(direct_local_get ("datetime_dtconnect"))) : direct_local_get ("core_unknown"));
 			$f_return['object_url'] = $f_parsed_array['pageurl'];
 			$f_return['object_available'] = true;
 

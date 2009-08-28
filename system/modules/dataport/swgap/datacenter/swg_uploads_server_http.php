@@ -163,8 +163,7 @@ case "download-check":
 		if ($direct_classes['kernel']->v_usertype_get_int ($direct_settings['user']['type']) < 4) { $g_filters_array = direct_datacenter_uploads_filters_get (); }
 		if ((!isset ($g_task_array['datacenter_upload_downloads']))||(!is_array ($g_task_array['datacenter_upload_downloads']))) { $g_task_array['datacenter_upload_downloads'] = array (); }
 
-		if (isset ($g_task_array['datacenter_upload_downloads_size'])) { $g_downloads_size = $g_task_array['datacenter_upload_downloads_size']; }
-		else { $g_downloads_size = 0; }
+		$g_downloads_size = ((isset ($g_task_array['datacenter_upload_downloads_size'])) ? $g_task_array['datacenter_upload_downloads_size'] : 0);
 
 		while ((!empty ($g_task_array['datacenter_upload_downloads_unconfirmed']))&&($g_timeout_time > time ()))
 		{
@@ -190,9 +189,7 @@ Check for:
 			if ((!$g_download_type)||($g_download_type == "application/octet-stream"))
 			{
 				$g_download_file_array = pathinfo ($g_download_array['name']);
-
-				if (isset ($g_download_file_array['extension'])) { $g_download_type = $direct_classes['basic_functions']->mimetype_extension ($g_download_file_array['extension']); }
-				else { $g_download_file_array['type'] = "text/x-unknown"; }
+				$g_download_type = ((isset ($g_download_file_array['extension'])) ? $direct_classes['basic_functions']->mimetype_extension ($g_download_file_array['extension']) : "text/x-unknown");
 			}
 
 			if ((200 != $g_request_result_code)&&(203 != $g_request_result_code))
@@ -255,8 +252,7 @@ Check for:
 			direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
 			$g_downloads_confirmed = ($g_task_array['datacenter_upload_downloads_unconfirmed_count'] - (count ($g_task_array['datacenter_upload_downloads_unconfirmed'])));
 
-			if ((isset ($g_task_array['datacenter_upload_overwrite_title']))&&($g_task_array['datacenter_upload_overwrite_title'])) { $direct_cachedata['output_job'] = $g_task_array['datacenter_upload_overwrite_title']; }
-			else { $direct_cachedata['output_job'] = direct_local_get ("datacenter_source_serverside"); }
+			$direct_cachedata['output_job'] = (((isset ($g_task_array['datacenter_upload_overwrite_title']))&&($g_task_array['datacenter_upload_overwrite_title'])) ? $g_task_array['datacenter_upload_overwrite_title'] : direct_local_get ("datacenter_source_serverside"));
 
 			$direct_cachedata['output_ajaxtarget'] = direct_linker ("url0","m=dataport&s=swgap;datacenter;uploads_server_http&a=download-check&dsd=tid+".$g_tid,false);
 			$direct_cachedata['output_ajaxnexttarget'] = direct_linker ("url0","m=dataport&s=swgap;datacenter;uploads_server_http&a=download-run&dsd=tid+{$g_tid}++dtheme+".$g_dtheme_mode,false);
@@ -389,19 +385,15 @@ case "download-run":
 
 		if (empty ($g_task_array['datacenter_upload_downloads']))
 		{
-			if (strpos ($g_task_array['datacenter_upload_target_did'],"-") === false) { $g_datacenter_object = new direct_datacenter (); }
-			else { $g_datacenter_object = new direct_datacenter_home (); }
+			$g_datacenter_object = ((strpos ($g_task_array['datacenter_upload_target_did'],"-") === false) ? new direct_datacenter () : new direct_datacenter_home ());
 
-			if ($g_datacenter_object) { $g_datacenter_array = $g_datacenter_object->get ($g_task_array['datacenter_upload_target_did']); }
-			else { $g_datacenter_array = NULL; }
+			$g_datacenter_array = ($g_datacenter_object ? $g_datacenter_object->get ($g_task_array['datacenter_upload_target_did']) : NULL);
 
 			if ((is_array ($g_datacenter_array))&&($g_datacenter_object->is_directory ())&&($g_datacenter_object->is_writable ()))
 			{
 				direct_credits_payment_get_specials ("datacenter_file_new",$g_task_array['datacenter_upload_target_did'],$direct_settings['datacenter_file_new_credits_onetime'],$direct_settings['datacenter_file_new_credits_periodically']);
 
-				if (((isset ($g_task_array['datacenter_upload_only']))&&($g_task_array['datacenter_upload_only']))||((isset ($g_task_array['datacenter_upload_mode_physical']))&&($g_task_array['datacenter_upload_mode_physical']))) { $g_upload_check = true; }
-				else { $g_upload_check = false; }
-
+				$g_upload_check = ((((isset ($g_task_array['datacenter_upload_only']))&&($g_task_array['datacenter_upload_only']))||((isset ($g_task_array['datacenter_upload_mode_physical']))&&($g_task_array['datacenter_upload_mode_physical']))) ? true : false);
 				$g_files = direct_datacenter_uploads_save ($g_task_array['datacenter_upload_results'],$g_task_array['datacenter_upload_results'],$g_task_array,$g_datacenter_array['ddbdatalinker_id_main'],$g_upload_directory,($direct_settings['datacenter_file_new_credits_onetime'] * 0.000001),($direct_settings['datacenter_file_new_credits_periodically'] * 0.000001));
 				if (($g_files)&&(!$g_upload_check)) { $g_datacenter_object->add_objects ($g_files); }
 			}
@@ -421,15 +413,12 @@ case "download-run":
 		{
 			direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
 
-			if ((isset ($g_task_array['datacenter_upload_overwrite_title']))&&($g_task_array['datacenter_upload_overwrite_title'])) { $direct_cachedata['output_job'] = $g_task_array['datacenter_upload_overwrite_title']; }
-			else { $direct_cachedata['output_job'] = direct_local_get ("datacenter_source_serverside"); }
+			$direct_cachedata['output_job'] = (((isset ($g_task_array['datacenter_upload_overwrite_title']))&&($g_task_array['datacenter_upload_overwrite_title'])) ? $g_task_array['datacenter_upload_overwrite_title'] : direct_local_get ("datacenter_source_serverside"));
 
 			$direct_cachedata['output_ajaxtarget'] = direct_linker ("url0","m=dataport&s=swgap;datacenter;uploads_server_http&a=download-run&dsd=tid+".$g_tid,false);
 			$direct_cachedata['output_pagetarget'] = direct_linker ("url0","m=dataport&s=swgap;datacenter;uploads_server_http&a=download-run&dsd=tid+{$g_tid}++dtheme+".$g_dtheme_mode);
 			$direct_cachedata['output_scripttarget'] = direct_linker ("url0","m=dataport&s=swgap;datacenter;uploads_server_http&a=download-run&dsd=tid+{$g_tid}++dtheme+{$g_dtheme_mode}++",false);
-
-			if (isset ($g_task_array['datacenter_upload_serverside_return'])) { $direct_cachedata['output_ajaxnexttarget'] = direct_linker ("url0",$g_task_array['datacenter_upload_serverside_return'],false); }
-			else { $direct_cachedata['output_ajaxnexttarget'] = direct_linker ("url0","m=datacenter&s=uploads&a=results&dsd=tid+".$g_tid,false); }
+			$direct_cachedata['output_ajaxnexttarget'] = ((isset ($g_task_array['datacenter_upload_serverside_return'])) ? direct_linker ("url0",$g_task_array['datacenter_upload_serverside_return'],false) : direct_linker ("url0","m=datacenter&s=uploads&a=results&dsd=tid+".$g_tid,false));
 
 			$direct_cachedata['output_percentage'] = direct_aphandler_percentage ($g_downloaded_size,$g_task_array['datacenter_upload_downloads_size']);
 			$direct_cachedata['output_time_elapsed'] = direct_aphandler_elapsed ($direct_cachedata['core_time'] - $g_task_array['datacenter_upload_downloads_time_start']);
