@@ -230,7 +230,11 @@
 <errors><datacenter>
 
  <did><invalid><input input="string" value="" /></invalid></did>
- <dir><delete><physical><input input="string" value="" /></physical></delete></dir>
+
+ <dir>
+  <delete><physical><input input="string" value="" /></physical></delete>
+  <physical><name><invalid><input input="string" value="" /></invalid></name></physical>
+ </dir>
 
  <file>
   <limit><reached><input input="string" value="" /></reached></limit>

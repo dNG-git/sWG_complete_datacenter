@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<swg_datacenter_filters_file_v1>
+<swg_datacenter_filters_file_v1 xmlns="urn:de.direct-netware.xmlns:swg.datacenter.filters.v1">
+
 <mimetype value='application/pdf' module='application' function='pdf' />
 <mimetype value='application/x-ipk' module='application' function='xipk' />
 <mimetype value='image/gif' module='image' function='gif' />
@@ -7,4 +8,5 @@
 <mimetype value='image/png' module='image' function='png' />
 <mimetype value='text/html' module='basic' function='textfiletypes' />
 <mimetype value='text/plain' module='basic' function='textfiletypes' />
+
 </swg_datacenter_filters_file_v1>
