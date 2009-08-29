@@ -3,6 +3,7 @@
 
 <mimetype value='application/pdf' module='application' function='pdf' />
 <mimetype value='application/x-ipk' module='application' function='xipk' />
+<mimetype value='audio/mpeg' module='audio' function='mpeg' />
 <mimetype value='image/gif' module='image' function='gif' />
 <mimetype value='image/jpeg' module='image' function='jpeg' />
 <mimetype value='image/png' module='image' function='png' />

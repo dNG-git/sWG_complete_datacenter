@@ -154,7 +154,7 @@ case "files-save":
 Build the form
 ------------------------------------------------------------------------- */
 
-		$direct_classes['formbuilder']->entry_add ("element","dfiles","",true);
+		$direct_classes['formbuilder']->entry_add ("element","dfiles",NULL,true);
 
 		if (!$g_mode_save) { direct_mods_include ($direct_settings['datacenter_uploads_serverside_mods_support'],"datacenter_uploads_server","files",$g_task_array); }
 		$direct_cachedata['output_formelements'] = $direct_classes['formbuilder']->form_get ($g_mode_save);
