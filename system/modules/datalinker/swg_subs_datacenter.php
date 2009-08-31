@@ -186,8 +186,8 @@ Save data edited
 			else
 			{
 				$g_task_array["datalinker_datacenter_subs_new_".$direct_cachedata['i_dtype']] = 0;
-				$g_source_url = urlencode (base64_encode ("m=datalinker&s=subs_datacenter&a=new&dsd=tid+".$g_tid));
-				$g_target_url = urlencode (base64_encode ("m=datalinker&s=subs_datacenter&a=new-selected&dsd=tid+{$g_tid}++[oid]"));
+				$g_source = urlencode (base64_encode ("m=datalinker&s=subs_datacenter&a=new&dsd=tid+".$g_tid));
+				$g_target = urlencode (base64_encode ("m=datalinker&s=subs_datacenter&a=new-selected&dsd=tid+{$g_tid}++[oid]"));
 			}
 
 			direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
@@ -196,7 +196,7 @@ Save data edited
 			{
 			case 1:
 			{
-				$direct_classes['output']->redirect (direct_linker ("url1","m=datacenter&s=control_dirs&a=new&dsd=doid+{$g_task_array['datalinker_eid']}++source+{$g_source_url}++target+".$g_target_url,false));
+				$direct_classes['output']->redirect (direct_linker ("url1","m=datacenter&s=control_dirs&a=new&dsd=doid+{$g_task_array['datalinker_eid']}++source+{$g_source}++target+".$g_target,false));
 				break 1;
 			}
 			case 2:
@@ -206,7 +206,7 @@ Save data edited
 			}
 			case 3:
 			{
-				$direct_classes['output']->redirect (direct_linker ("url1","m=datacenter&s=control_links&a=new&dsd=doid+{$g_task_array['datalinker_eid']}++source+{$g_source_url}++target+".$g_target_url,false));
+				$direct_classes['output']->redirect (direct_linker ("url1","m=datacenter&s=control_links&a=new&dsd=doid+{$g_task_array['datalinker_eid']}++source+{$g_source}++target+".$g_target,false));
 				break 1;
 			}
 			default: { $direct_classes['error_functions']->error_page ("standard","core_tid_invalid","sWG/#echo(__FILEPATH__)# _a=new-save_ (#echo(__LINE__)#)"); }
@@ -311,7 +311,7 @@ case "new-selected":
 			direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
 			$direct_classes['output']->redirect (direct_linker ("url1","m=datalinker&s=subs&a=new-selected&dsd=tid+".$g_tid,false));
 		}
-		else { $direct_classes['output']->redirect (direct_linker ("url1","m=datalinker&s=subs_datacenter&a=select&dsd=tid+".$g_tid,false)); }
+		else { $direct_classes['output']->redirect (direct_linker ("url1","m=datalinker&s=subs_datacenter&a=new&dsd=tid+".$g_tid,false)); }
 	}
 	else { $direct_classes['error_functions']->error_page ("standard","core_tid_invalid","sWG/#echo(__FILEPATH__)# _a=new-selected_ (#echo(__LINE__)#)"); }
 	//j// EOA
@@ -457,8 +457,6 @@ Save data edited
 				$g_task_array['search_words'] = $direct_cachedata['i_swords'];
  
 				direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
-				// md5 ("search")
-
 				$direct_classes['output']->redirect (direct_linker ("url1","m=dataport&s=swgap;search;selector&a=run&dsd=dtheme+1++tid+".$g_tid,false));
 			}
 			else
@@ -572,7 +570,6 @@ case "select-post":
 			$g_task_array['datalinker_subs_new_selected_done'] = 1;
 
 			direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
-			// md5 ("datalinker")
 			$direct_classes['output']->redirect (direct_linker ("url1","m=datalinker&s=subs&a=new-link&dsd=tid+".$g_tid,false));
 		}
 		else
@@ -583,6 +580,7 @@ case "select-post":
 				unset ($g_task_array['datacenter_back_return']);
 			}
 
+			direct_tmp_storage_write ($g_task_array,$g_tid,$g_task_array['core_sid'],"task_cache","evars",$direct_cachedata['core_time'],($direct_cachedata['core_time'] + 3600));
 			$direct_classes['output']->redirect (direct_linker ("url1","m=datalinker&s=subs_datacenter&a=select&dsd=tid+".$g_tid,false));
 		}
 	}
