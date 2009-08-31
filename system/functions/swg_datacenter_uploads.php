@@ -344,7 +344,6 @@ function direct_datacenter_uploads_save ($f_files,&$f_result_array,$f_task_array
 	foreach ($f_files as $f_file_array)
 	{
 		$f_file_failed = isset ($f_file_array['error']);
-		$f_file_name = $f_file_array['name'];
 
 		if ($f_timeout_time > time ())
 		{
@@ -432,7 +431,7 @@ Prepare final upload location
 
 		if (!$f_file_failed)
 		{
-			$f_file_path = str_replace (" ","_",$f_file_array['name']);
+			$f_file_path = str_replace (array (" ",":","/","\\","'",'"'),"_",$f_file_array['name']);
 			$f_file_prefix = "";
 
 			if (!$f_physical_check)

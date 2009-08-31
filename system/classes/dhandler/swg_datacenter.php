@@ -1131,6 +1131,11 @@ $this->define_extra_joins (array (
 				$f_return[0] = true;
 				if (!$this->data_deleted) { $f_return[1] = true; }
 			}
+			elseif ($direct_classes['kernel']->v_group_user_check_right ("datacenter_{$this->data['ddbdatalinker_id_object']}_write"))
+			{
+				$f_return[0] = true;
+				if (!$this->data_deleted) { $f_return[1] = true; }
+			}
 			elseif ($this->data['ddbdatacenter_mode_all'] == "r") { $f_return[0] = true; }
 			else { $f_return[0] = $direct_classes['kernel']->v_group_user_check_right ("datacenter_{$this->data['ddbdatalinker_id_object']}_read"); }
 		}
