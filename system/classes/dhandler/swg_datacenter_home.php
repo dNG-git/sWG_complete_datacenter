@@ -620,7 +620,7 @@ $f_init_array = array (
 "marker_type" => $this->marker_type
 );
 
-			$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],"d4d66a02daefdb2f70ff2507a78fd5ec","",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
+			$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],$this->data_sid,"",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
 			// md5 ("datacenter")
 
 			$f_return =& $this->class_subs[$f_cache_signature];
@@ -692,7 +692,7 @@ $this->define_extra_joins (array (
 			if ($f_date > 0) { $this->define_extra_conditions ($direct_classes['db']->define_row_conditions_encode ($direct_settings['datacenter_table'].".ddbdatalinker_sorting_date",$f_date,"number",">")); }
 			if ($f_object_status == 1) { $this->define_extra_conditions ("<element1 attribute='{$direct_settings['datacenter_table']}.ddbdatacenter_deleted' value='0' type='number' />"); }
 
-			if ($f_count_only) { $this->class_subs[$f_cache_signature] = parent::get_subs ("",NULL,$this->data['ddbdatalinker_id_object'],"d4d66a02daefdb2f70ff2507a78fd5ec","",0,1,"time-desc"); }
+			if ($f_count_only) { $this->class_subs[$f_cache_signature] = parent::get_subs ("",NULL,$this->data['ddbdatalinker_id_object'],$this->data_sid,"",0,1,"time-desc"); }
 			else
 			{
 $f_init_array = array (
@@ -704,7 +704,7 @@ $f_init_array = array (
 "marker_type" => $this->marker_type
 );
 
-				$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],"d4d66a02daefdb2f70ff2507a78fd5ec","",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
+				$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],$this->data_sid,"",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
 				// md5 ("datacenter")
 			}
 

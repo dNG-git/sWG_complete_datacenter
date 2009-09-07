@@ -930,7 +930,7 @@ $f_select_joins = array (
 				$this->define_extra_joins ($f_select_joins);
 				if ($f_object_status == 1) { $this->define_extra_conditions ("<element1 attribute='{$direct_settings['datacenter_table']}.ddbdatacenter_deleted' value='0' type='number' />"); }
 
-				$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],"d4d66a02daefdb2f70ff2507a78fd5ec","",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
+				$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],$this->data_sid,"",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
 				// md5 ("datacenter")
 			}
 
@@ -1026,10 +1026,10 @@ $this->define_extra_joins (array (
 				if ($f_date > 0) { $this->define_extra_conditions ($direct_classes['db']->define_row_conditions_encode ($direct_settings['datacenter_table'].".ddbdatalinker_sorting_date",$f_date,"number",">")); }
 				if ($f_object_status == 1) { $this->define_extra_conditions ("<element1 attribute='{$direct_settings['datacenter_table']}.ddbdatacenter_deleted' value='0' type='number' />"); }
 
-				if ($f_count_only) { $this->class_subs[$f_cache_signature] = parent::get_subs ("",NULL,$this->data['ddbdatalinker_id_object'],"d4d66a02daefdb2f70ff2507a78fd5ec","",0,1,"time-desc"); }
+				if ($f_count_only) { $this->class_subs[$f_cache_signature] = parent::get_subs ("",NULL,$this->data['ddbdatalinker_id_object'],$this->data_sid,"",0,1,"time-desc"); }
 				else
 				{
-					$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],"d4d66a02daefdb2f70ff2507a78fd5ec","",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
+					$this->class_subs[$f_cache_signature] = parent::get_subs ("direct_datacenter",NULL,$this->data['ddbdatalinker_id_object'],$this->data_sid,"",$f_offset,$f_perpage,$f_sorting_mode,$f_init_array);
 					// md5 ("datacenter")
 				}
 			}
@@ -1157,7 +1157,6 @@ $this->define_extra_joins (array (
 	* @uses   direct_datalinker::define_extra_attributes()
 	* @uses   direct_datalinker::define_extra_conditions()
 	* @uses   direct_datalinker::define_extra_joins()
-	* @uses   direct_datalinker::get_subs()
 	* @uses   direct_db::define_row_conditions_encode()
 	* @uses   direct_debug()
 	* @uses   USE_debug_reporting
