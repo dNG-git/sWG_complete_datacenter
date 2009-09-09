@@ -700,7 +700,7 @@ $f_select_joins = array (
 
 			$f_result_array = parent::get_aid ($f_attributes,$f_values);
 
-			if (($f_result_array)&&($f_result_array['ddbdatalinker_sid'] == $this->data_sid))
+			if (($f_result_array)&&($f_result_array['ddbdatalinker_sid'] == $this->data_sid)&&(isset ($f_result_array['ddbdatacenter_id'])))
 			{
 				$this->data = $f_result_array;
 
