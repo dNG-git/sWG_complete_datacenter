@@ -3,13 +3,6 @@
 <phpexit><![CDATA[<?php exit (); ?>]]></phpexit>
 
 <datacenter value="1">
- <table value="swg_datacenter" />
-
- <path>
-  <icons value="data/themes/{var:theme}/" />
-  <upload value="data/uploads/" />
- </path>
-
  <media value="1">
   <mods><support value="1" /></mods>
  </media>
@@ -19,6 +12,12 @@
   <unknown value="mimetype_unknown.png" />
  </mimetype>
 
+ <path>
+  <icons value="data/themes/{var:theme}/" />
+  <upload value="data/uploads/" />
+ </path>
+
+ <table value="swg_datacenter" />
  <upload><files><max value="500" /></files></upload>
 
  <uploads>
