@@ -98,7 +98,7 @@ class direct_datacenter_home extends direct_datalinker_uhome
 	protected $class_subs;
 /**
 	* @var boolean $data_writable_as_submission True if the current user is
-	*      allowed to submit new documents in this category
+	*      allowed to submit new entries in this category
 */
 	protected $data_deleted;
 /**
@@ -115,7 +115,7 @@ class direct_datacenter_home extends direct_datalinker_uhome
 	protected $data_pid;
 /**
 	* @var boolean $data_writable True if the current user is allowed to
-	*      create new and edit his own documents in this category
+	*      create new and edit his own entries in this category
 */
 	protected $data_writable;
 /**
@@ -188,7 +188,6 @@ Informing the system about available functions
 		$this->functions['define_readable'] = true;
 		$this->functions['define_trusted'] = true;
 		$this->functions['define_writable'] = true;
-		$this->functions['delete'] = true;
 		$this->functions['get_evars'] = true;
 		$this->functions['get_objects'] = defined ("CLASS_direct_datacenter");
 		$this->functions['get_objects_since_date'] = $this->functions['get_objects'];
@@ -196,6 +195,7 @@ Informing the system about available functions
 		$this->functions['get_sorted_physical_objects'] = false;
 		$this->functions['get_plocation'] = true;
 		$this->functions['get_upload_folder'] = function_exists ("direct_dir_create");
+		$this->functions['insert_link'] = false;
 		$this->functions['is_deleted'] = true;
 		$this->functions['is_directory'] = true;
 		$this->functions['is_locked'] = true;
@@ -587,13 +587,13 @@ Set up an additional datacenter class elements :)
 	* @uses   direct_db::define_row_conditions_encode()
 	* @uses   direct_debug()
 	* @uses   USE_debug_reporting
-	* @return array Array with pointers to the documents
+	* @return array Array with pointers to the DataCenter entries
 	* @since  v0.1.00
 */
 	public function get_objects ($f_object_status,$f_offset = 0,$f_perpage = "",$f_sorting_mode = "title-sticky-asc")
 	{
 		global $direct_classes,$direct_settings;
-		if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -datacenter_home->get_objects ($f_object_status,$f_offset,$f_perpage,$f_sorting_mode,+f_frontpage_mode)- (#echo(__LINE__)#)"); }
+		if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -datacenter_home->get_objects ($f_object_status,$f_offset,$f_perpage,$f_sorting_mode)- (#echo(__LINE__)#)"); }
 
 		$f_return = array ();
 		$f_cache_signature = md5 ($this->data['ddbdatalinker_id_object'].$f_object_status.$f_offset.$f_perpage.$f_sorting_mode);
@@ -740,6 +740,42 @@ $f_init_array = array (
 		}
 
 		return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -datacenter_home->get_upload_folder ()- (#echo(__LINE__)#)",:#*/$f_return/*#ifdef(DEBUG):,true):#*/;
+	}
+
+	//f// direct_datacenter_home->insert ($f_insert_mode_deactivate = true)
+/**
+	* Writes new object data to the database.
+	*
+	* @param  boolean $f_insert_mode_deactivate Deactive insert mode after calling
+	*         update ()
+	* @uses   direct_datacenter::update()
+	* @uses   direct_debug()
+	* @uses   USE_debug_reporting
+	* @return boolean True on success
+	* @since  v0.1.00
+*/
+	public function insert ($f_insert_mode_deactivate = true)
+	{
+		if (USE_debug_reporting) { direct_debug (3,"sWG/#echo(__FILEPATH__)# -datacenter->insert (+f_insert_mode_deactivate)- (#echo(__LINE__)#)"); }
+		$this->data_insert_mode = true;
+		return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -datacenter->insert ()- (#echo(__LINE__)#)",(:#*/$this->update (true,true,$f_insert_mode_deactivate)/*#ifdef(DEBUG):),true):#*/;
+	}
+
+	//f// direct_datacenter->insert_link ($f_insert_mode_deactivate = true)
+/**
+	* Writes new object data to the database.
+	*
+	* @param  boolean $f_insert_mode_deactivate Deactive insert mode after calling
+	*         update ()
+	* @uses   direct_debug()
+	* @uses   USE_debug_reporting
+	* @return boolean Always false; this method is unsupported
+	* @since  v0.1.00
+*/
+	public function insert_link ($f_insert_mode_deactivate = true)
+	{
+		if (USE_debug_reporting) { direct_debug (3,"sWG/#echo(__FILEPATH__)# -datacenter->insert_link (+f_insert_mode_deactivate)- (#echo(__LINE__)#)"); }
+		return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -datacenter->insert_link ()- (#echo(__LINE__)#)",:#*/false/*#ifdef(DEBUG):,true):#*/;
 	}
 
 	//f// direct_datacenter_home->is_deleted ()
@@ -892,8 +928,9 @@ $f_init_array = array (
 			$f_pageurl = preg_replace ("#\[(.*?)\]#","",$f_pageurl);
 			$f_return[$f_prefix."pageurl"] = direct_linker ($f_connector_type,$f_pageurl);
 
-			$f_return[$f_prefix."pageurl_download"] = "";
 			$f_return[$f_prefix."pageurl_parent"] = "";
+			if (!$direct_settings['datacenter_redirector_permalinks']) { $f_return[$f_prefix."pageurl_permalink"] = NULL; }
+			$f_return[$f_prefix."pageurl_download"] = "";
 			$f_return[$f_prefix."owner"] = $this->data['ddbdatacenter_last_id'];
 			$f_return[$f_prefix."size"] = 0;
 			$f_return[$f_prefix."icon"] = "";
@@ -995,6 +1032,11 @@ Mark this class as the most up-to-date one
 ------------------------------------------------------------------------- */
 
 define ("CLASS_direct_datacenter_home",true);
+
+//j// Script specific commands
+
+if (!isset ($direct_settings['redirector_permalinks'])) { $direct_settings['redirector_permalinks'] = false; }
+if (!isset ($direct_settings['datacenter_redirector_permalinks'])) { $direct_settings['datacenter_redirector_permalinks'] = $direct_settings['redirector_permalinks']; }
 }
 
 //j// EOF

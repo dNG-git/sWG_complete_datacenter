@@ -86,37 +86,38 @@ function direct_datacenter_oset_object_parse ($f_object)
 
 	if (!empty ($f_object))
 	{
-$f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width:100%;table-layout:auto'>
+$f_return = ("<table class='pageborder1' style='width:100%;table-layout:auto'>
 <thead class='pagehide'><tr>
-<td colspan='2' align='left' class='pagetitlecellbg' style='padding:$direct_settings[theme_td_padding]'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object"))."</span></td>
+<td colspan='2' class='pagetitlecellbg' style='padding:$direct_settings[theme_td_padding];text-align:left'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object"))."</span></td>
 </tr></thead><tbody><tr>
-<td valign='top' align='right' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding]'><span class='pageextracontent' style='font-weight:bold'>".(direct_local_get ("datacenter_object")).":</span></td>
-<td valign='middle' align='center' class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding]'><span class='pagecontent'>");
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding];text-align:right;vertical-align:top'><span class='pageextracontent' style='font-weight:bold'>".(direct_local_get ("datacenter_object")).":</span></td>
+<td class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding];text-align:center;vertical-align:middle'><span class='pagecontent'>");
 
 		if ($f_object['icon']) { $f_return .= "<img src='{$f_object['icon']}' border='0' alt='' title='' /><br />"; }
 		$f_object_title = ((strlen ($f_object['title_alt'])) ? $f_object['title_alt'] : $f_object['title']);
 		$f_return .= ((($f_object['dir'])&&($f_object['pageurl'])) ? "<a href=\"{$f_object['pageurl']}\" target='_self'>$f_object_title</a>" : $f_object_title);
+		if (isset ($f_object['pageurl_permalink'])) { $f_return .= "<br />\n<span style='font-size:10px'>(<a href=\"{$f_object['pageurl_permalink']}\" target='_self'>".(direct_local_get ("core_redirector_permalink"))."</a>)</span>"; }
 
 $f_return .= ("</span></td>
 </tr><tr>
-<td valign='middle' align='right' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding]'><span class='pageextracontent' style='font-size:10px;font-weight:bold'>".(direct_local_get ("datacenter_type")).":</span></td>
-<td valign='middle' align='center' class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding]'><span class='pagecontent' style='font-size:10px'>{$f_object['type']}</span></td>
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding];text-align:right;vertical-align:middle'><span class='pageextracontent' style='font-size:10px;font-weight:bold'>".(direct_local_get ("datacenter_type")).":</span></td>
+<td class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding];text-align:center;vertical-align:middle'><span class='pagecontent' style='font-size:10px'>{$f_object['type']}</span></td>
 </tr><tr>
-<td valign='middle' align='right' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding]'><span class='pageextracontent' style='font-size:10px;font-weight:bold'>".(direct_local_get ("datacenter_lastedit")).":</span></td>
-<td valign='middle' align='center' class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding]'><span class='pagecontent' style='font-size:10px'>{$f_object['time']}</span></td>
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding];text-align:right;vertical-align:middle'><span class='pageextracontent' style='font-size:10px;font-weight:bold'>".(direct_local_get ("datacenter_lastedit")).":</span></td>
+<td class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding];text-align:center;vertical-align:middle'><span class='pagecontent' style='font-size:10px'>{$f_object['time']}</span></td>
 </tr><tr>
-<td valign='middle' align='right' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding]'><span class='pageextracontent' style='font-size:10px;font-weight:bold'>".(direct_local_get ("datacenter_size")).":</span></td>
-<td valign='middle' align='center' class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding]'><span class='pagecontent' style='font-size:10px'>{$f_object['size']} ".(direct_local_get ("datacenter_bytes"))."</span></td>
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding];text-align:right;vertical-align:middle'><span class='pageextracontent' style='font-size:10px;font-weight:bold'>".(direct_local_get ("datacenter_size")).":</span></td>
+<td class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding];text-align:center;vertical-align:middle'><span class='pagecontent' style='font-size:10px'>{$f_object['size']} ".(direct_local_get ("datacenter_bytes"))."</span></td>
 </tr>");
 
 		if ($f_object['desc'])
 		{
 $f_return .= ("<tr>
-<td valign='top' align='right' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding]'><span class='pageextracontent' style='font-weight:bold'>".(direct_local_get ("datacenter_desc")).":</span></td>
-<td valign='middle' align='center' class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding]'>
-<table border='0' cellspacing='0' cellpadding='0' summary=''>
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_form_td_padding];text-align:right;vertical-align:top'><span class='pageextracontent' style='font-weight:bold'>".(direct_local_get ("datacenter_desc")).":</span></td>
+<td class='pagebg' style='width:75%;padding:$direct_settings[theme_form_td_padding];text-align:center;vertical-align:middle'>
+<table style='margin:auto'>
 <tbody><tr>
-<td align='left'><div class='pagecontent'>{$f_object['desc']}</div></td>
+<td style='text-align:left'><div class='pagecontent'>{$f_object['desc']}</div></td>
 </tr></tbody>
 </table>
 </td>
@@ -151,11 +152,11 @@ function direct_datacenter_oset_objects_parse ($f_objects,$f_link_files = true)
 
 	if (!empty ($f_objects))
 	{
-$f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width:100%'>
+$f_return = ("<table class='pageborder1' style='width:100%'>
 <thead><tr>
-<td valign='middle' align='center' class='pagetitlecellbg' style='width:60%;padding:$direct_settings[theme_td_padding]'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object"))."</span></td>
-<td valign='middle' align='center' class='pagetitlecellbg' style='width:25%;padding:$direct_settings[theme_td_padding]'><span class='pagetitlecellcontent' style='font-size:10px'>".(direct_local_get ("datacenter_lastedit"))."</span></td>
-<td valign='middle' align='center' class='pagetitlecellbg' style='width:15%;padding:$direct_settings[theme_td_padding]'><span class='pagetitlecellcontent' style='font-size:10px'>".(direct_local_get ("datacenter_size"))."</span></td>
+<td class='pagetitlecellbg' style='width:60%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object"))."</span></td>
+<td class='pagetitlecellbg' style='width:25%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'><span class='pagetitlecellcontent' style='font-size:10px'>".(direct_local_get ("datacenter_lastedit"))."</span></td>
+<td class='pagetitlecellbg' style='width:15%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'><span class='pagetitlecellcontent' style='font-size:10px'>".(direct_local_get ("datacenter_size"))."</span></td>
 </tr></thead><tbody>");
 
 		foreach ($f_objects as $f_object_array)
@@ -163,7 +164,7 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 			$f_css_class = ($f_object_array['marked'] ? "extra" : "");
 
 $f_return .= ("<tr>
-<td valign='middle' align='left' class='page{$f_css_class}bg' style='width:60%;padding:$direct_settings[theme_td_padding]'><a id=\"{$f_object_array['id']}\" name=\"{$f_object_array['id']}\"></a><span class='page{$f_css_class}content'>");
+<td class='page{$f_css_class}bg' style='width:60%;padding:$direct_settings[theme_td_padding];text-align:left;vertical-align:middle'><a id=\"{$f_object_array['id']}\" name=\"{$f_object_array['id']}\"></a><span class='page{$f_css_class}content'>");
 
 			if ($f_object_array['icon']) { $f_return .= "<img src='{$f_object_array['icon']}' border='0' alt='' title='' style='float:left;padding-right:5px' />"; }
 			if (($direct_settings['datacenter_marker_use_imagebuttons'])&&($f_object_array['pageurl_marker'])) { $f_return .= ($f_object_array['marked'] ? "<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+data/themes/$direct_settings[theme]/mini_datacenter_object_unmark.png",true,false))."' border='0' alt='' title='' style='float:left' /></a>" : "<a href=\"{$f_object_array['pageurl_marker']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+data/themes/$direct_settings[theme]/mini_datacenter_object_mark.png",true,false))."' border='0' alt='' title='' style='float:left' /></a>"); }
@@ -177,8 +178,8 @@ $f_return .= ("<tr>
 			if ($f_object_array['desc']) { $f_return .= "<br />\n<span style='font-size:10px'>{$f_object_array['desc']}</span>"; }
 
 $f_return .= ("</span></td>
-<td valign='middle' align='center' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_td_padding]'><span class='pageextracontent' style='font-size:10px'>{$f_object_array['time']}</span></td>
-<td valign='middle' align='center' class='pageextrabg' style='width:25%;padding:$direct_settings[theme_td_padding]'><span class='pageextracontent' style='font-size:10px'>{$f_object_array['size']} ".(direct_local_get ("datacenter_bytes"))."</span></td>
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'><span class='pageextracontent' style='font-size:10px'>{$f_object_array['time']}</span></td>
+<td class='pageextrabg' style='width:25%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'><span class='pageextracontent' style='font-size:10px'>{$f_object_array['size']} ".(direct_local_get ("datacenter_bytes"))."</span></td>
 </tr>");
 		}
 
@@ -208,9 +209,9 @@ function direct_datacenter_oset_selector_icons_parse ($f_objects)
 
 	if (!empty ($f_objects))
 	{
-$f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width:100%;table-layout:auto'>
+$f_return = ("<table class='pageborder1' style='width:100%;table-layout:auto'>
 <thead class='pagehide'><tr>
-<td colspan='2' align='left' class='pagetitlecellbg' style='padding:$direct_settings[theme_td_padding]'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object"))."</span></td>
+<td colspan='2' class='pagetitlecellbg' style='padding:$direct_settings[theme_td_padding];text-align:left'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object"))."</span></td>
 </tr></thead><tbody>");
 
 		foreach ($f_objects as $f_object_array)
@@ -221,18 +222,18 @@ $f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width
 			{
 				if ($f_right_switch)
 				{
-					$f_return .= "</td>\n<td valign='middle' align='center' class='page{$f_css_class}bg' style='width:50%;padding:$direct_settings[theme_td_padding]'>";
+					$f_return .= "</td>\n<td class='page{$f_css_class}bg' style='width:50%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'>";
 					$f_right_switch = false;
 				}
 				else
 				{
-					$f_return .= "</td>\n</tr><tr>\n<td valign='middle' align='center' class='page{$f_css_class}bg' style='width:50%;padding:$direct_settings[theme_td_padding]'>";
+					$f_return .= "</td>\n</tr><tr>\n<td class='page{$f_css_class}bg' style='width:50%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'>";
 					$f_right_switch = true;
 				}
 			}
 			else
 			{
-				$f_return .= "\n<tr>\n<td valign='middle' align='center' class='page{$f_css_class}bg' style='width:50%;padding:$direct_settings[theme_td_padding]'>";
+				$f_return .= "\n<tr>\n<td class='page{$f_css_class}bg' style='width:50%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'>";
 				$f_right_switch = true;
 			}
 

@@ -91,8 +91,8 @@ case "view":
 {
 	if (USE_debug_reporting) { direct_debug (1,"sWG/#echo(__FILEPATH__)# _a=view_ (#echo(__LINE__)#)"); }
 
-	$g_oid_d = (isset ($direct_settings['dsd']['doid_d']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['doid_d'])) : "");
-	$g_oid = (isset ($direct_settings['dsd']['doid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['doid'])) : $g_oid_d);
+	$g_oid = (isset ($direct_settings['dsd']['doid_d']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['doid_d'])) : "");
+	$g_oid = (isset ($direct_settings['dsd']['doid']) ? ($direct_classes['basic_functions']->inputfilter_basic ($direct_settings['dsd']['doid'])) : $g_oid);
 	$direct_cachedata['output_page'] = (isset ($direct_settings['dsd']['page']) ? ($direct_classes['basic_functions']->inputfilter_number ($direct_settings['dsd']['page'])) : 1);
 
 	$direct_cachedata['page_this'] = "m=datacenter&s=media&dsd=doid+{$g_oid}++page+".$direct_cachedata['output_page'];

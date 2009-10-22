@@ -95,15 +95,13 @@ function direct_output_oset_datacenter_media_details ()
 		$f_user_width = "";
 	}
 
-$f_return = ("<table cellspacing='1' summary='' class='pageborder1' style='width:100%;table-layout:auto'>
-<thead><tr>
-<td colspan='2' align='left' class='pagetitlecellbg' style='padding:$direct_settings[theme_td_padding]'><span class='pagetitlecellcontent'>".(direct_local_get ("datacenter_object_details"))."</span></td>
-</tr></thead><tbody><tr>
-<td$f_user_colspan valign='middle' align='left' class='pageextrabg' style='{$f_user_width}padding:$direct_settings[theme_td_padding]'>".(direct_account_oset_parse_user_fullh ($direct_cachedata['output_object'],"page","","","user"))."</td>");
+	$f_return = "<table class='pageborder1' style='width:100%;table-layout:auto'>\n<thead><tr>\n<td colspan='2' class='pagetitlecellbg' style='padding:$direct_settings[theme_td_padding];text-align:left'><span class='pagetitlecellcontent'>";
+	if (isset ($direct_cachedata['output_object']['pageurl_permalink'])) { $f_return .= "<a href=\"{$direct_cachedata['output_object']['pageurl_permalink']}\" target='_self'><img src='".(direct_linker_dynamic ("url0","s=cache&dsd=dfile+$direct_settings[path_themes]/$direct_settings[theme]/status_permalink.png",true,false))."' border='0' alt='".(direct_local_get ("core_redirector_permalink"))."' title='".(direct_local_get ("core_redirector_permalink"))."' style='float:right;margin-left:5px' /></a>"; }
+	$f_return .= (direct_local_get ("datacenter_object_details"))."</span></td>\n</tr></thead><tbody><tr>\n<td$f_user_colspan class='pageextrabg' style='{$f_user_width}padding:$direct_settings[theme_td_padding];text-align:left;vertical-align:middle'>".(direct_account_oset_parse_user_fullh ($direct_cachedata['output_object'],"page","","","user"))."</td>";
 
 	if (isset ($direct_cachedata['output_dir']))
 	{
-		$f_return .= "\n<td valign='middle' align='center' class='pagebg' style='width:50%;padding:$direct_settings[theme_td_padding]'><span class='pagecontent'>";
+		$f_return .= "\n<td class='pagebg' style='width:50%;padding:$direct_settings[theme_td_padding];text-align:center;vertical-align:middle'><span class='pagecontent'>";
 		if ($direct_cachedata['output_dir']['icon']) { $f_return .= "<img src='{$direct_cachedata['output_dir']['icon']}' border='0' alt='' title='' /><br />\n"; }
 
 		$f_dir_title = ((strlen ($direct_cachedata['output_dir']['title_alt'])) ? $direct_cachedata['output_dir']['title_alt'] : $direct_cachedata['output_dir']['title']);
