@@ -136,5 +136,39 @@ function direct_datacenter_filter_application_xipk ($f_file_path,$f_original = "
 	return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -direct_datacenter_filter_application_xipk ()- (#echo(__LINE__)#)",:#*/$f_return/*#ifdef(DEBUG):,true):#*/;
 }
 
+//f// direct_datacenter_filter_application_zip ($f_file_path,$f_original = "")
+/**
+* Tests the magic string for an "application/zip" file.
+*
+* @param  boolean $f_file_path File path of the potential ZIP file
+* @param  integer $f_original Original file
+* @uses   direct_debug()
+* @uses   direct_file_functions::close()
+* @uses   direct_file_functions::open()
+* @uses   direct_file_functions::read()
+* @uses   direct_file_functions::resource_check()
+* @uses   USE_debug_reporting
+* @return boolean True if the file contains the magic string
+* @since  v0.1.00
+*/
+function direct_datacenter_filter_application_zip ($f_file_path,$f_original = "")
+{
+	if (USE_debug_reporting) { direct_debug (5,"sWG/#echo(__FILEPATH__)# -direct_datacenter_filter_application_zip ($f_file_path,$f_original)- (#echo(__LINE__)#)"); }
+
+	$f_return = false;
+	$f_file_object = new direct_file_functions ();
+	$f_file_object->open ($f_file_path,true,"rb");
+
+	if ($f_file_object->resource_check ())
+	{
+		$f_magic_string = $f_file_object->read (4);
+		$f_file_object->close ();
+
+		if ($f_magic_string == "PK\x03\x04") { $f_return = true; }
+	}
+
+	return /*#ifdef(DEBUG):direct_debug (7,"sWG/#echo(__FILEPATH__)# -direct_datacenter_filter_application_zip ()- (#echo(__LINE__)#)",:#*/$f_return/*#ifdef(DEBUG):,true):#*/;
+}
+
 //j// EOF
 ?>

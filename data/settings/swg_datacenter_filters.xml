@@ -1,8 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <swg_datacenter_filters_file_v1 xmlns="urn:de.direct-netware.xmlns:swg.datacenter.filters.v1">
 
+<mimetype value='application/java-archive' module='application' function='zip' />
 <mimetype value='application/pdf' module='application' function='pdf' />
+<mimetype value='application/vnd.oasis.opendocument.database' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.chart' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.chart-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.formula' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.formula-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.graphics' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.graphics-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.image' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.image-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.presentation' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.presentation-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.spreadsheet' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.spreadsheet-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.text' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.text-master' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.text-template' module='application' function='zip' />
+<mimetype value='application/vnd.oasis.opendocument.text-web' module='application' function='zip' />
+<mimetype value='application/vnd.openofficeorg.extension' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.presentationml.presentation' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.presentationml.slide' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.presentationml.slideshow' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.presentationml.template' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.spreadsheetml.template' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.wordprocessingml.document' module='application' function='zip' />
+<mimetype value='application/vnd.openxmlformats-officedocument.wordprocessingml.template' module='application' function='zip' />
+<mimetype value='application/vnd.sun.xml.calc' module='application' function='zip' />
+<mimetype value='application/vnd.sun.xml.draw' module='application' function='zip' />
+<mimetype value='application/vnd.sun.xml.impress' module='application' function='zip' />
+<mimetype value='application/vnd.sun.xml.math' module='application' function='zip' />
+<mimetype value='application/vnd.sun.xml.writer' module='application' function='zip' />
 <mimetype value='application/x-ipk' module='application' function='xipk' />
+<mimetype value='application/x-zip' alias='application/zip' module='application' function='zip' />
+<mimetype value='application/x-zip-compressed' alias='application/zip' module='application' function='zip' />
+<mimetype value='application/zip' module='application' function='zip' />
 <mimetype value='audio/mpeg' module='audio' function='mpeg' />
 <mimetype value='image/gif' module='image' function='gif' />
 <mimetype value='image/jpeg' module='image' function='jpeg' />

@@ -242,13 +242,17 @@ strict in untrusted production environments.
 
 						if (function_exists ($f_function))
 						{
-							if (!$f_function ($f_file_array['tmp_name'],$f_file_array['name'])) { $f_file_failed = true; }
+							if ($f_function ($f_file_array['tmp_name'],$f_file_array['name']))
+							{
+								if (isset ($f_filter_array['alias'])) { $f_file_array['type'] = $f_filter_array['alias']; }
+							}
+							else { $f_file_failed = true; }
 						}
 						else { $f_file_failed = true; }
 					}
 					else { $f_file_failed = true; }
 
-					if ($f_file_failed) { $f_file_array['error'] = "file_type_unsupported"; }
+					if (($f_file_failed)&&(!isset ($f_file_array['error']))) { $f_file_array['error'] = "file_type_unsupported"; }
 				}
 
 				$f_file_array['size'] = $f_file_size;
@@ -660,7 +664,7 @@ function direct_datacenter_uploads_server_download (&$f_task_array,$f_upload_dir
 
 				if ("error::timeout" != $f_request_result_code)
 				{
-					if ((is_bool ($f_file_data))||((200 != $f_request_result_code)&&(206 != $f_request_result_code))||(!$f_file_object->write ($f_file_data)))
+					if ((is_bool ($f_file_data))||((200 != $f_request_result_code)&&(201 != $f_request_result_code)&&(206 != $f_request_result_code))||(!$f_file_object->write ($f_file_data)))
 					{
 						$f_bytes_unread = 0;
 						$f_download_array['error'] = "transfer_error";
@@ -700,7 +704,11 @@ function direct_datacenter_uploads_server_download (&$f_task_array,$f_upload_dir
 
 						if (function_exists ($f_function))
 						{
-							if (!$f_function ($f_download_array['tmp_name'],$f_download_array['name'])) { $f_download_array['error'] = "file_type_unsupported"; }
+							if ($f_function ($f_download_array['tmp_name'],$f_download_array['name']))
+							{
+								if (isset ($f_filter_array['alias'])) { $f_download_array['type'] = $f_filter_array['alias']; }
+							}
+							else { $f_download_array['error'] = "file_type_unsupported"; }
 						}
 						else { $f_download_array['error'] = "file_type_unsupported"; }
 					}
